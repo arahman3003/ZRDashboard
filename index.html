@@ -4329,6 +4329,36 @@
         }
       }
 
+
+
+      /* =========================
+         FIX POPUP GAMBAR SELALU DI DEPAN
+         Modal dipaksa keluar dari section agar tidak nyangkut saat pindah menu.
+      ========================= */
+      #imagePreviewModal.image-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 2147483000 !important;
+        display: none !important;
+        pointer-events: none !important;
+      }
+
+      #imagePreviewModal.image-modal.show {
+        display: block !important;
+        pointer-events: auto !important;
+      }
+
+      #imagePreviewModal .image-modal-backdrop {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 1 !important;
+      }
+
+      #imagePreviewModal .image-modal-content {
+        position: relative !important;
+        z-index: 2 !important;
+      }
+
     </style>
   </head>
 
@@ -6848,8 +6878,15 @@ function getImageCategory(item) {
         const img = document.getElementById("imageModalImg");
         const titleEl = document.getElementById("imageModalTitle");
         if (!modal || !img || !titleEl) return;
+
+        // Pindahkan modal langsung ke body supaya tidak ikut tersembunyi oleh section/menu.
+        if (modal.parentNode !== document.body) {
+          document.body.appendChild(modal);
+        }
+
         titleEl.textContent = title || "Preview Gambar";
         img.src = url || "";
+        modal.style.display = "block";
         modal.classList.add("show");
         document.body.style.overflow = "hidden";
       }
@@ -6857,7 +6894,10 @@ function getImageCategory(item) {
       function closeImageModal() {
         const modal = document.getElementById("imagePreviewModal");
         const img = document.getElementById("imageModalImg");
-        if (modal) modal.classList.remove("show");
+        if (modal) {
+          modal.classList.remove("show");
+          modal.style.display = "none";
+        }
         if (img) img.src = "";
         document.body.style.overflow = "";
       }
