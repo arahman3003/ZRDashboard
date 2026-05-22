@@ -4130,10 +4130,8 @@
 
 
       /* =========================
-         SIDEBAR PROFILE CLEAN + FULL JABATAN BADGE
-         - Nama dan jabatan di bagian paling atas sidebar disembunyikan.
-         - Avatar tetap tampil agar sidebar tidak kosong.
-         - Badge kanan atas menampilkan jabatan asli, bukan singkatan CS.
+         SIDEBAR LOGO ONLY
+         - Logo dashboard statis, bukan avatar profil admin.
       ========================= */
       .sidebar-admin-profile .sidebar-admin-info {
         display: none !important;
@@ -4144,8 +4142,21 @@
         margin-bottom: 28px !important;
       }
 
-      .sidebar-admin-profile .sidebar-admin-avatar {
-        margin: 0 auto !important;
+      .dashboard-logo-wrap {
+        display: flex;
+        justify-content: center !important;
+        align-items: center;
+        width: 100%;
+        padding-top: 4px;
+      }
+
+      .dashboard-sidebar-logo {
+        display: block;
+        width: 170px;
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35));
       }
 
       .dashboard-role-badge,
@@ -4155,21 +4166,6 @@
         white-space: nowrap !important;
         padding-left: 12px !important;
         padding-right: 12px !important;
-      }
-
-
-      /* =========================
-         DASHBOARD LOGO KHUSUS SIDEBAR
-         Logo dashboard hanya tampil di kiri atas sidebar.
-         Foto profil/admin tetap berbeda dan tidak dipaksa menjadi logo.
-      ========================= */
-      #sidebarProfileAvatar.has-image {
-        background-size: contain !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-        color: transparent !important;
-        text-shadow: none !important;
       }
 
     </style>
@@ -4208,12 +4204,8 @@
 
     <div class="app">
       <aside class="sidebar">
-        <div class="brand sidebar-admin-profile">
-          <div id="sidebarProfileAvatar" class="brand-badge sidebar-admin-avatar">DB</div>
-          <div class="sidebar-admin-info">
-            <h1 id="sidebarProfileName">Dashboard Admin</h1>
-            <p id="sidebarProfileRole">Google Sheet Web App</p>
-          </div>
+        <div class="brand sidebar-admin-profile dashboard-logo-wrap">
+          <img src="https://i.imgur.com/bR3y00o.png" alt="Logo Dashboard" class="dashboard-sidebar-logo">
         </div>
 
         <div class="nav">
@@ -7252,7 +7244,6 @@ function getImageCategory(item) {
       const ADMIN_STORAGE_KEY = "dashboardAdminAccountsV3";
       const ADMIN_PROFILE_STORAGE_KEY = "dashboardAdminProfilesV2";
       const MASTER_PASSWORD_STORAGE_KEY = "dashboardMasterPasswordAsep";
-      const DASHBOARD_LOGO_URL = "https://i.imgur.com/UX89Ra4.jpeg";
       const MASTER_ADMIN_DEFAULT = {
         username: "aseprahman",
         password: "1",
@@ -7349,10 +7340,7 @@ function getImageCategory(item) {
         const defaultTitle = isMaster ? "Admin Master" : "Admin";
         const displayName = String(saved.displayName || defaultName).trim();
         const title = String(saved.title || defaultTitle).trim();
-
-        // Avatar profil/admin tetap terpisah dari logo dashboard.
         const avatarUrl = sanitizeProfileImageUrl(saved.avatarUrl || "");
-
         return { displayName, title, avatarUrl };
       }
 
@@ -7432,8 +7420,7 @@ function getImageCategory(item) {
         const nameEl = document.getElementById("sidebarProfileName");
         const roleEl = document.getElementById("sidebarProfileRole");
 
-        // Sidebar kiri atas selalu logo dashboard, bukan foto profil/admin.
-        applyAvatarToElement(avatarEl, { avatarUrl: DASHBOARD_LOGO_URL }, "DB");
+        applyAvatarToElement(avatarEl, profile, role === "master" ? "AR" : "DB");
         if (nameEl) nameEl.textContent = profile.displayName || username || "Dashboard Admin";
         if (roleEl) roleEl.textContent = role === "master" ? `👑 ${profile.title || "Admin Master"}` : `👤 ${profile.title || "Admin"}`;
       }
