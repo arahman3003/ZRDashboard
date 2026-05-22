@@ -4359,6 +4359,16 @@
         z-index: 2 !important;
       }
 
+
+      /* FIX: hapus profil admin di topbar agar tidak double dengan Welcome */
+      .dashboard-topbar .dashboard-admin-pill {
+        display: none !important;
+      }
+
+      .dashboard-topbar-right {
+        justify-content: flex-end !important;
+      }
+
     </style>
   </head>
 
@@ -4432,11 +4442,7 @@
                   <span id="dashboardTopDate">20 Mei 2026</span>
                 </div>
                 <button class="dashboard-moon-btn" type="button" aria-label="Mode malam">☾</button>
-                <div class="dashboard-admin-pill">
-                  <div id="dashboardTopAvatar" class="dashboard-admin-avatar">DB</div>
-                  <div class="dashboard-admin-name" id="dashboardTopName">Dashboard Admin</div>
-                  <div class="dashboard-role-badge" id="dashboardTopRoleBadge">CS</div>
-                </div>
+                <!-- Profil admin di top bar dihapus agar tidak double. Profil cukup tampil di Welcome. -->
               </div>
             </div>
 
