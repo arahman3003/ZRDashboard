@@ -4159,14 +4159,11 @@
 
 
       /* =========================
-         DASHBOARD LOGO AVATAR
-         Logo master memakai gambar dashboard, bukan inisial AR.
+         DASHBOARD LOGO KHUSUS SIDEBAR
+         Logo dashboard hanya tampil di kiri atas sidebar.
+         Foto profil/admin tetap berbeda dan tidak dipaksa menjadi logo.
       ========================= */
-      #sidebarProfileAvatar.has-image,
-      #dashboardTopAvatar.has-image,
-      #dashboardWelcomeAvatar.has-image,
-      .admin-list-avatar.has-image,
-      .profile-preview-avatar.has-image {
+      #sidebarProfileAvatar.has-image {
         background-size: contain !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
@@ -7262,7 +7259,7 @@ function getImageCategory(item) {
         role: "master",
         label: "Asep Rahman",
         title: "Master Admin",
-        avatarUrl: DASHBOARD_LOGO_URL
+        avatarUrl: ""
       };
 
       function normalizeAdminUsername(username) {
@@ -7353,10 +7350,8 @@ function getImageCategory(item) {
         const displayName = String(saved.displayName || defaultName).trim();
         const title = String(saved.title || defaultTitle).trim();
 
-        // Master memakai logo dashboard tetap, bukan foto profil / inisial AR.
-        const avatarUrl = isMaster
-          ? sanitizeProfileImageUrl(DASHBOARD_LOGO_URL)
-          : sanitizeProfileImageUrl(saved.avatarUrl || "");
+        // Avatar profil/admin tetap terpisah dari logo dashboard.
+        const avatarUrl = sanitizeProfileImageUrl(saved.avatarUrl || "");
 
         return { displayName, title, avatarUrl };
       }
@@ -7437,7 +7432,8 @@ function getImageCategory(item) {
         const nameEl = document.getElementById("sidebarProfileName");
         const roleEl = document.getElementById("sidebarProfileRole");
 
-        applyAvatarToElement(avatarEl, profile, role === "master" ? "AR" : "DB");
+        // Sidebar kiri atas selalu logo dashboard, bukan foto profil/admin.
+        applyAvatarToElement(avatarEl, { avatarUrl: DASHBOARD_LOGO_URL }, "DB");
         if (nameEl) nameEl.textContent = profile.displayName || username || "Dashboard Admin";
         if (roleEl) roleEl.textContent = role === "master" ? `👑 ${profile.title || "Admin Master"}` : `👤 ${profile.title || "Admin"}`;
       }
