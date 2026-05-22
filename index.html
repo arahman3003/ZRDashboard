@@ -4168,6 +4168,77 @@
         padding-right: 12px !important;
       }
 
+
+      /* =========================
+         CUSTOM BACKGROUND AREA TENGAH
+         Background hanya muncul di area main/tengah, bukan sidebar kiri.
+      ========================= */
+      :root {
+        --dashboard-center-bg: none;
+      }
+
+      .main {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .main::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-image: var(--dashboard-center-bg);
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        opacity: 1;
+        display: none;
+        pointer-events: none;
+      }
+
+      .main::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: rgba(255,255,255,0.16);
+        display: none;
+        pointer-events: none;
+      }
+
+      body.has-center-background .main::before,
+      body.has-center-background .main::after {
+        display: block;
+      }
+
+      .main > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      body.has-center-background .dashboard-home-panel {
+        background: rgba(248,248,248,0.72) !important;
+        backdrop-filter: blur(2px);
+      }
+
+      body.has-center-background .dashboard-welcome-card,
+      body.has-center-background .dashboard-summary-card {
+        background-color: rgba(255,255,255,0.84) !important;
+        backdrop-filter: blur(2px);
+      }
+
+      body.has-center-background .panel,
+      body.has-center-background .admin-manager-card,
+      body.has-center-background .pkcs-box,
+      body.has-center-background .rek-modern-box,
+      body.has-center-background .prediksi-market-panel,
+      body.has-center-background .prediksi-result-panel,
+      body.has-center-background .syair-sidebar,
+      body.has-center-background .syair-preview-panel {
+        backdrop-filter: blur(6px);
+      }
+
     </style>
   </head>
 
@@ -4254,7 +4325,7 @@
               <div class="dashboard-welcome-left">
                 <div class="dashboard-wave">👋</div>
                 <div class="dashboard-welcome-text">
-                  <span>Hola,</span>
+                  <span>Welcome,</span>
                   <div id="dashboardWelcomeAvatar" class="dashboard-welcome-avatar">DB</div>
                   <strong id="dashboardWelcomeName">Dashboard Admin</strong>
                   <em id="dashboardWelcomeRole">CS</em>
@@ -4555,6 +4626,22 @@
                     <input type="password" id="currentAccountConfirmPassword" placeholder="Ulangi password baru">
                   </div>
                   <button class="btn copy-live-btn" onclick="changeCurrentAccountPassword()">Simpan Password Baru</button>
+                </div>
+              </div>
+
+
+              <div class="admin-manager-card">
+                <div class="admin-manager-title">Background Tengah Dashboard</div>
+                <div class="admin-manager-sub">Masukkan link gambar untuk background area tengah. Sidebar kiri tidak ikut berubah dan background berlaku di semua menu.</div>
+                <div class="admin-form-stack">
+                  <div>
+                    <label>LINK GAMBAR BACKGROUND</label>
+                    <input type="text" id="dashboardCenterBackgroundUrl" placeholder="https://.../background.png">
+                  </div>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <button class="btn copy-live-btn" type="button" onclick="saveDashboardCenterBackground()">Simpan Background</button>
+                    <button class="btn secondary" type="button" onclick="clearDashboardCenterBackground()">Hapus</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -4955,6 +5042,55 @@
         dropdown3: [],
         dropdown4: []
       };
+
+      const DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY = "dashboardCenterBackgroundUrl";
+      const DEFAULT_DASHBOARD_CENTER_BACKGROUND_URL = "";
+
+      function cleanDashboardBackgroundUrl(url) {
+        const clean = String(url || "").trim();
+        if (!clean) return "";
+        if (/^(https?:|data:image\/)/i.test(clean)) return clean;
+        return "";
+      }
+
+      function applyDashboardCenterBackground(url) {
+        const clean = cleanDashboardBackgroundUrl(url);
+        const input = document.getElementById("dashboardCenterBackgroundUrl");
+        if (input) input.value = clean;
+
+        if (clean) {
+          document.documentElement.style.setProperty("--dashboard-center-bg", `url("${clean.replace(/"/g, "%22")}")`);
+          document.body.classList.add("has-center-background");
+        } else {
+          document.documentElement.style.setProperty("--dashboard-center-bg", "none");
+          document.body.classList.remove("has-center-background");
+        }
+      }
+
+      function initDashboardCenterBackground() {
+        const saved = localStorage.getItem(DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY) || DEFAULT_DASHBOARD_CENTER_BACKGROUND_URL;
+        applyDashboardCenterBackground(saved);
+      }
+
+      function saveDashboardCenterBackground() {
+        const input = document.getElementById("dashboardCenterBackgroundUrl");
+        const clean = cleanDashboardBackgroundUrl(input ? input.value : "");
+
+        if (input && input.value.trim() && !clean) {
+          updateStatus("Link background tidak valid. Gunakan link yang diawali http:// atau https://");
+          return;
+        }
+
+        localStorage.setItem(DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY, clean);
+        applyDashboardCenterBackground(clean);
+        updateStatus(clean ? "Background tengah dashboard berhasil disimpan." : "Background tengah dashboard dikosongkan.");
+      }
+
+      function clearDashboardCenterBackground() {
+        localStorage.removeItem(DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY);
+        applyDashboardCenterBackground("");
+        updateStatus("Background tengah dashboard dihapus.");
+      }
 
       const staticImageData = [
         { title: "SS PROFIL DANA", url: "https://snipboard.io/uUh3ZJ.jpg" },
@@ -7956,6 +8092,7 @@ function getImageCategory(item) {
       });
 
       window.onload = function() {
+        initDashboardCenterBackground();
         const authed = initDashboardAuth();
         initSidebar();
         initKeyboardShortcuts();
