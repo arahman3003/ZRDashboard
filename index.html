@@ -4446,10 +4446,92 @@
       }
 
 
+      /* =========================
+         FIX MODAL TAMBAH GAMBAR SELALU DI ATAS
+         Modal dipaksa keluar dari section supaya tidak muncul di bawah card/gallery.
+      ========================= */
+      .image-edit-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 2147483000 !important;
+        display: none !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 18px !important;
+        pointer-events: none !important;
+      }
 
-      /* FIX FINAL: tombol bulan / mode malam di topbar dihilangkan total */
+      .image-edit-modal.show {
+        display: flex !important;
+        pointer-events: auto !important;
+      }
+
+      .image-edit-modal .image-edit-backdrop {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 1 !important;
+        background: rgba(0,0,0,0.76) !important;
+        backdrop-filter: blur(7px) !important;
+      }
+
+      .image-edit-modal .image-edit-content,
+      .image-edit-modal .image-delete-content {
+        position: relative !important;
+        z-index: 2 !important;
+        margin: 0 auto !important;
+        max-height: 92vh !important;
+        overflow-y: auto !important;
+      }
+
+      #imageAddModal {
+        z-index: 2147483000 !important;
+      }
+
+
+
+      /* =========================
+         FIX SYAIR PREVIEW STABLE CENTER
+         Preview tetap di tengah saat browser zoom/resize,
+         tidak keluar dari panel Preview Hasil.
+      ========================= */
       .dashboard-moon-btn {
         display: none !important;
+      }
+
+      .syair-preview-panel {
+        overflow: hidden !important;
+      }
+
+      .syair-preview-frame {
+        overflow: hidden !important;
+        width: 100% !important;
+      }
+
+      .syair-preview-area {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        overflow: hidden !important;
+      }
+
+      .syair-preview-stage {
+        position: relative !important;
+        flex: 0 0 auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        overflow: visible !important;
+        padding-top: 0 !important;
+        max-width: 100% !important;
+      }
+
+      #syairCardCapture {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform-origin: top left !important;
       }
 
     </style>
@@ -4461,7 +4543,7 @@
       <div class="login-card">
         <div class="login-logo">DB</div>
         <h2>Login Admin</h2>
-        <p></b></p>
+        <p>Masuk dulu untuk membuka dashboard. Admin bisa ubah password sendiri di menu <b>Pengaturan</b>.</p>
         <div class="login-field">
           <label>USERNAME</label>
           <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username">
@@ -4474,7 +4556,7 @@
           <button class="btn copy-live-btn" onclick="doAdminLogin()">Masuk Dashboard</button>
         </div>
         <div id="loginError" class="login-error">Username atau password salah.</div>
-        <div class="login-note-master"></div>
+        <div class="login-note-master">Master: <b>aseprahman</b> / <b>1</b>. Hanya master yang bisa mendaftarkan admin baru.</div>
       </div>
     </div>
 
@@ -4947,7 +5029,6 @@
                 <h3>IMAGE MANAGER PRO</h3>
                 <p class="panel-sub"></p>
               </div>
-              <button class="btn copy-live-btn" onclick="openImageAddModal()">+ Tambah Gambar</button>
             </div>
 
             <div class="backup-mini-panel">
@@ -6713,8 +6794,17 @@ function getImageCategory(item) {
       }
 
 
+
+      function ensureModalOnBody(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal && modal.parentElement !== document.body) {
+          document.body.appendChild(modal);
+        }
+        return modal;
+      }
+
       function openImageAddModal() {
-        const modal = document.getElementById("imageAddModal");
+        const modal = ensureModalOnBody("imageAddModal");
         const titleInput = document.getElementById("newImageTitle");
         const urlInput = document.getElementById("newImageUrl");
         const categoryInput = document.getElementById("newImageCategory");
@@ -6956,7 +7046,7 @@ function getImageCategory(item) {
       }
 
       function openImageModal(title, url) {
-        const modal = document.getElementById("imagePreviewModal");
+        const modal = ensureModalOnBody("imagePreviewModal");
         const img = document.getElementById("imageModalImg");
         const titleEl = document.getElementById("imageModalTitle");
         if (!modal || !img || !titleEl) return;
@@ -7277,28 +7367,52 @@ function getImageCategory(item) {
 
       function syncSyairPreviewScale() {
         const frame = document.querySelector('.syair-preview-frame');
+        const area = document.getElementById('syairPreviewArea');
         const stage = document.getElementById('syairPreviewStage');
         const card = document.getElementById('syairCardCapture');
         if (!frame || !stage || !card) return;
 
-        /*
-          Preview dibuat besar dan stabil:
-          - layout asli tetap 1500x1000
-          - yang diubah hanya scale preview di layar
-          - export/copy tetap memakai ukuran asli 1500x1000
-        */
-        const gap = 34;
-        const frameWidth = frame.clientWidth || frame.getBoundingClientRect().width || 1200;
-        const availableWidth = Math.max(720, frameWidth - (gap * 2));
-        const targetPreviewWidth = Math.min(920, availableWidth);
-        const scale = Math.max(0.48, Math.min(targetPreviewWidth / 1500, 1));
-        const previewHeight = Math.round(1000 * scale);
+        const frameRect = frame.getBoundingClientRect();
+        const frameWidth = Math.max(320, frame.clientWidth || frameRect.width || 1200);
 
-        card.style.transform = `scale(${scale})`;
+        // Ukuran asli syair tetap 1500x1000 agar export/copy tidak berubah.
+        const originalWidth = 1500;
+        const originalHeight = 1000;
+
+        // Preview selalu mengikuti lebar panel, jadi saat zoom tidak keluar tabel.
+        const sideGap = frameWidth < 800 ? 18 : 44;
+        const availableWidth = Math.max(280, frameWidth - sideGap);
+        const scale = Math.max(0.18, Math.min(availableWidth / originalWidth, 1));
+        const previewWidth = Math.floor(originalWidth * scale);
+        const previewHeight = Math.floor(originalHeight * scale);
+
+        if (area) {
+          area.style.display = 'flex';
+          area.style.justifyContent = 'center';
+          area.style.alignItems = 'flex-start';
+          area.style.overflow = 'hidden';
+        }
+
+        stage.style.width = `${previewWidth}px`;
+        stage.style.minWidth = `${previewWidth}px`;
+        stage.style.maxWidth = '100%';
         stage.style.height = `${previewHeight}px`;
         stage.style.minHeight = `${previewHeight}px`;
+        stage.style.marginLeft = 'auto';
+        stage.style.marginRight = 'auto';
+        stage.style.position = 'relative';
+        stage.style.overflow = 'visible';
+        stage.style.paddingTop = '0';
         stage.style.justifyContent = 'center';
         stage.style.alignItems = 'flex-start';
+
+        card.style.position = 'absolute';
+        card.style.left = '0';
+        card.style.top = '0';
+        card.style.width = `${originalWidth}px`;
+        card.style.height = `${originalHeight}px`;
+        card.style.transformOrigin = 'top left';
+        card.style.transform = `scale(${scale})`;
       }
 
       function copySyairText() {
