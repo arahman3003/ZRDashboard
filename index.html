@@ -4157,6 +4157,24 @@
         padding-right: 12px !important;
       }
 
+
+      /* =========================
+         DASHBOARD LOGO AVATAR
+         Logo master memakai gambar dashboard, bukan inisial AR.
+      ========================= */
+      #sidebarProfileAvatar.has-image,
+      #dashboardTopAvatar.has-image,
+      #dashboardWelcomeAvatar.has-image,
+      .admin-list-avatar.has-image,
+      .profile-preview-avatar.has-image {
+        background-size: contain !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: #ffffff !important;
+        color: transparent !important;
+        text-shadow: none !important;
+      }
+
     </style>
   </head>
 
@@ -7237,13 +7255,14 @@ function getImageCategory(item) {
       const ADMIN_STORAGE_KEY = "dashboardAdminAccountsV3";
       const ADMIN_PROFILE_STORAGE_KEY = "dashboardAdminProfilesV2";
       const MASTER_PASSWORD_STORAGE_KEY = "dashboardMasterPasswordAsep";
+      const DASHBOARD_LOGO_URL = "https://i.imgur.com/UX89Ra4.jpeg";
       const MASTER_ADMIN_DEFAULT = {
         username: "aseprahman",
         password: "1",
         role: "master",
         label: "Asep Rahman",
         title: "Master Admin",
-        avatarUrl: ""
+        avatarUrl: DASHBOARD_LOGO_URL
       };
 
       function normalizeAdminUsername(username) {
@@ -7333,7 +7352,12 @@ function getImageCategory(item) {
         const defaultTitle = isMaster ? "Admin Master" : "Admin";
         const displayName = String(saved.displayName || defaultName).trim();
         const title = String(saved.title || defaultTitle).trim();
-        const avatarUrl = sanitizeProfileImageUrl(saved.avatarUrl || "");
+
+        // Master memakai logo dashboard tetap, bukan foto profil / inisial AR.
+        const avatarUrl = isMaster
+          ? sanitizeProfileImageUrl(DASHBOARD_LOGO_URL)
+          : sanitizeProfileImageUrl(saved.avatarUrl || "");
+
         return { displayName, title, avatarUrl };
       }
 
