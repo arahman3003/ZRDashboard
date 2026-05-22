@@ -4279,6 +4279,56 @@
         backdrop-filter: blur(6px);
       }
 
+
+      /* TOTAL ADMIN PINDAH KE MENU ADMIN */
+      .admin-list-header-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      .admin-total-side-badge {
+        min-width: 138px;
+        padding: 12px 16px;
+        border-radius: 18px;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(139,92,246,0.22));
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+        color: #fff;
+      }
+
+      .admin-total-side-badge .admin-total-icon {
+        font-size: 20px;
+        line-height: 1;
+        margin-bottom: 5px;
+      }
+
+      .admin-total-side-badge .admin-total-label {
+        font-size: 12px;
+        font-weight: 900;
+        line-height: 1.15;
+      }
+
+      .admin-total-side-badge strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      @media (max-width: 760px) {
+        .admin-list-header-row {
+          flex-direction: column;
+        }
+
+        .admin-total-side-badge {
+          width: 100%;
+        }
+      }
+
     </style>
   </head>
 
@@ -4373,12 +4423,6 @@
               </div>
             </div>
 
-
-            <div class="dashboard-summary-card">
-              <div class="dashboard-summary-icon">👥</div>
-              <h3>Total Admin</h3>
-              <strong id="dashboardTotalUsers">0 Users</strong>
-            </div>
 
           </div>
         </section>
@@ -4594,8 +4638,17 @@
               </div>
 
               <div class="admin-manager-card">
-                <div class="admin-manager-title">Daftar Admin</div>
-                <div class="admin-manager-sub">Tombol <b>Edit</b> hanya muncul untuk master. Master bisa mengubah nama, jabatan, dan link gambar profil admin yang terdaftar.</div>
+                <div class="admin-list-header-row">
+                  <div>
+                    <div class="admin-manager-title">Daftar Admin</div>
+                    <div class="admin-manager-sub">Tombol <b>Edit</b> hanya muncul untuk master. Master bisa mengubah nama, jabatan, dan link gambar profil admin yang terdaftar.</div>
+                  </div>
+                  <div class="admin-total-side-badge">
+                    <div class="admin-total-icon">👥</div>
+                    <div class="admin-total-label">Total Admin</div>
+                    <strong id="adminManagerTotalUsers">0 Admin</strong>
+                  </div>
+                </div>
                 <div id="adminAccountList" class="admin-list"></div>
               </div>
             </div>
@@ -7606,6 +7659,15 @@ function getImageCategory(item) {
         return title || (role === "master" ? "Admin Master" : "Admin");
       }
 
+      function updateAdminTotalBadges() {
+        const adminCount = getAdminAccounts().length;
+        const dashboardTotalUsers = document.getElementById("dashboardTotalUsers");
+        const adminManagerTotalUsers = document.getElementById("adminManagerTotalUsers");
+
+        if (dashboardTotalUsers) dashboardTotalUsers.textContent = `${adminCount} Admin`;
+        if (adminManagerTotalUsers) adminManagerTotalUsers.textContent = `${adminCount} Admin`;
+      }
+
       function updateDashboardHomeProfile() {
         const username = sessionStorage.getItem("dashboardAdminUsername") || "";
         const role = sessionStorage.getItem("dashboardAdminRole") || "admin";
@@ -7629,10 +7691,7 @@ function getImageCategory(item) {
         if (profileTitle) profileTitle.textContent = displayName;
         if (profileSubtitle) profileSubtitle.textContent = username ? `Username: ${username}` : "Akun yang sedang login";
         if (profileRoleCard) profileRoleCard.textContent = profile.title || (role === "master" ? "Admin Master" : "Admin");
-        if (totalUsers) {
-          const adminCount = getAdminAccounts().length;
-          totalUsers.textContent = `${adminCount} Admin`;
-        }
+        updateAdminTotalBadges();
 
         applyAvatarToElement(document.getElementById("dashboardTopAvatar"), profile, role === "master" ? "AR" : "DB");
         applyAvatarToElement(document.getElementById("dashboardWelcomeAvatar"), profile, role === "master" ? "AR" : "DB");
@@ -7731,6 +7790,7 @@ function getImageCategory(item) {
         if (!listEl) return;
 
         const accounts = getAdminAccounts();
+        updateAdminTotalBadges();
         listEl.innerHTML = accounts.map(account => {
           const isMaster = account.role === "master";
           const fallback = isMaster ? "AR" : "AD";
