@@ -4446,11 +4446,49 @@
       }
 
 
-
-      /* FIX: tombol bulan/mode malam di topbar dihilangkan sesuai request */
-      .dashboard-moon-btn {
+      /* =========================
+         FIX MODAL TAMBAH GAMBAR SELALU DI ATAS
+         Modal dipaksa keluar dari section supaya tidak muncul di bawah card/gallery.
+      ========================= */
+      .image-edit-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 2147483000 !important;
         display: none !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 18px !important;
+        pointer-events: none !important;
       }
+
+      .image-edit-modal.show {
+        display: flex !important;
+        pointer-events: auto !important;
+      }
+
+      .image-edit-modal .image-edit-backdrop {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 1 !important;
+        background: rgba(0,0,0,0.76) !important;
+        backdrop-filter: blur(7px) !important;
+      }
+
+      .image-edit-modal .image-edit-content,
+      .image-edit-modal .image-delete-content {
+        position: relative !important;
+        z-index: 2 !important;
+        margin: 0 auto !important;
+        max-height: 92vh !important;
+        overflow-y: auto !important;
+      }
+
+      #imageAddModal {
+        z-index: 2147483000 !important;
+      }
+
     </style>
   </head>
 
@@ -4531,6 +4569,7 @@
                   <span class="dashboard-date-separator">|</span>
                   <span id="dashboardTopDate">20 Mei 2026</span>
                 </div>
+                <button class="dashboard-moon-btn" type="button" aria-label="Mode malam">☾</button>
               </div>
             </div>
 
@@ -6712,8 +6751,17 @@ function getImageCategory(item) {
       }
 
 
+
+      function ensureModalOnBody(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal && modal.parentElement !== document.body) {
+          document.body.appendChild(modal);
+        }
+        return modal;
+      }
+
       function openImageAddModal() {
-        const modal = document.getElementById("imageAddModal");
+        const modal = ensureModalOnBody("imageAddModal");
         const titleInput = document.getElementById("newImageTitle");
         const urlInput = document.getElementById("newImageUrl");
         const categoryInput = document.getElementById("newImageCategory");
@@ -6955,7 +7003,7 @@ function getImageCategory(item) {
       }
 
       function openImageModal(title, url) {
-        const modal = document.getElementById("imagePreviewModal");
+        const modal = ensureModalOnBody("imagePreviewModal");
         const img = document.getElementById("imageModalImg");
         const titleEl = document.getElementById("imageModalTitle");
         if (!modal || !img || !titleEl) return;
