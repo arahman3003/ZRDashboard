@@ -4369,6 +4369,80 @@
         justify-content: flex-end !important;
       }
 
+
+      /* FIX: pindahkan Welcome ke top bar atas */
+      .dashboard-topbar {
+        justify-content: space-between !important;
+        gap: 18px !important;
+        height: 86px !important;
+        padding: 0 22px 0 34px !important;
+      }
+
+      .dashboard-topbar-welcome {
+        display: flex !important;
+        align-items: center !important;
+        gap: 16px !important;
+        min-width: 0 !important;
+      }
+
+      .dashboard-topbar .dashboard-wave {
+        width: 46px !important;
+        height: 46px !important;
+        font-size: 28px !important;
+        border-radius: 16px !important;
+        background: rgba(241,245,249,0.22) !important;
+        color: #fff !important;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.18) !important;
+        flex: 0 0 auto !important;
+      }
+
+      .dashboard-topbar .dashboard-welcome-text {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 12px !important;
+        color: #fff !important;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.55) !important;
+      }
+
+      .dashboard-topbar .dashboard-welcome-text span,
+      .dashboard-topbar .dashboard-welcome-text strong {
+        color: #fff !important;
+        font-size: 22px !important;
+        font-weight: 900 !important;
+      }
+
+      .dashboard-topbar .dashboard-welcome-avatar {
+        width: 42px !important;
+        height: 42px !important;
+      }
+
+      .dashboard-home-panel .dashboard-welcome-card {
+        display: none !important;
+      }
+
+      .dashboard-topbar-right {
+        width: auto !important;
+        margin-left: auto !important;
+        justify-content: flex-end !important;
+        flex: 0 0 auto !important;
+      }
+
+      @media (max-width: 860px) {
+        .dashboard-topbar {
+          height: auto !important;
+          min-height: 86px !important;
+          flex-direction: column !important;
+          align-items: stretch !important;
+          padding: 14px 18px !important;
+        }
+
+        .dashboard-topbar-right {
+          margin-left: 0 !important;
+          justify-content: flex-start !important;
+        }
+      }
+
     </style>
   </head>
 
@@ -4433,7 +4507,15 @@
         <section id="dashboardSection" class="section active">
           <div class="dashboard-home-panel">
             <div class="dashboard-topbar">
-              <div class="dashboard-topbar-spacer"></div>
+              <div class="dashboard-topbar-welcome">
+                <div class="dashboard-wave">👋</div>
+                <div class="dashboard-welcome-text">
+                  <span>Welcome,</span>
+                  <div id="dashboardWelcomeAvatar" class="dashboard-welcome-avatar">DB</div>
+                  <strong id="dashboardWelcomeName">Dashboard Admin</strong>
+                  <em id="dashboardWelcomeRole">CS</em>
+                </div>
+              </div>
               <div class="dashboard-topbar-right">
                 <div class="dashboard-clock-pill">
                   <span>🕘</span>
@@ -4442,20 +4524,6 @@
                   <span id="dashboardTopDate">20 Mei 2026</span>
                 </div>
                 <button class="dashboard-moon-btn" type="button" aria-label="Mode malam">☾</button>
-                <!-- Profil admin di top bar dihapus agar tidak double. Profil cukup tampil di Welcome. -->
-              </div>
-            </div>
-
-
-            <div class="dashboard-welcome-card">
-              <div class="dashboard-welcome-left">
-                <div class="dashboard-wave">👋</div>
-                <div class="dashboard-welcome-text">
-                  <span>Welcome,</span>
-                  <div id="dashboardWelcomeAvatar" class="dashboard-welcome-avatar">DB</div>
-                  <strong id="dashboardWelcomeName">Dashboard Admin</strong>
-                  <em id="dashboardWelcomeRole">CS</em>
-                </div>
               </div>
             </div>
 
