@@ -3805,7 +3805,7 @@
       ========================= */
       .dashboard-home-panel {
         min-height: calc(100vh - 44px);
-        background: #f8f8f803;
+        background: #f8f8f8;
         color: #2b2b2b;
         border-radius: 0 0 22px 22px;
         overflow: hidden;
@@ -4202,7 +4202,7 @@
         position: absolute;
         inset: 0;
         z-index: 0;
-        background: rgba(255,255,255,0.16);
+        background: rgba(0,0,0,0.10);
         display: none;
         pointer-events: none;
       }
@@ -4217,15 +4217,55 @@
         z-index: 1;
       }
 
+      /* Wallpaper mode: kotak putih dashboard dihilangkan supaya gambar terlihat jelas */
       body.has-center-background .dashboard-home-panel {
-        background: rgba(248,248,248,0.72) !important;
-        backdrop-filter: blur(0px);
+        background: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+      }
+
+      body.has-center-background .dashboard-topbar {
+        background: rgba(15,20,32,0.42) !important;
+        backdrop-filter: blur(2px);
+        border-bottom-color: rgba(255,255,255,0.08) !important;
       }
 
       body.has-center-background .dashboard-welcome-card,
       body.has-center-background .dashboard-summary-card {
-        background-color: rgba(255,255,255,0.84) !important;
-        backdrop-filter: blur(0px);
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        backdrop-filter: none !important;
+      }
+
+      body.has-center-background .dashboard-welcome-card {
+        min-height: 104px;
+        margin-bottom: 18px;
+      }
+
+      body.has-center-background .dashboard-summary-card {
+        min-height: 96px;
+      }
+
+      body.has-center-background .dashboard-wave {
+        background: rgba(255,255,255,0.20) !important;
+        box-shadow: none !important;
+        backdrop-filter: blur(2px);
+      }
+
+      body.has-center-background .dashboard-welcome-text,
+      body.has-center-background .dashboard-welcome-text strong,
+      body.has-center-background .dashboard-summary-card h3,
+      body.has-center-background .dashboard-summary-card strong {
+        color: #ffffff !important;
+        text-shadow: 0 3px 12px rgba(0,0,0,0.85), 0 1px 2px rgba(0,0,0,0.90);
+      }
+
+      body.has-center-background .dashboard-summary-icon {
+        filter: none !important;
+        text-shadow: 0 3px 12px rgba(0,0,0,0.85);
       }
 
       body.has-center-background .panel,
@@ -4236,7 +4276,7 @@
       body.has-center-background .prediksi-result-panel,
       body.has-center-background .syair-sidebar,
       body.has-center-background .syair-preview-panel {
-        backdrop-filter: blur(0px);
+        backdrop-filter: blur(6px);
       }
 
     </style>
@@ -5044,7 +5084,7 @@
       };
 
       const DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY = "dashboardCenterBackgroundUrl";
-      const DEFAULT_DASHBOARD_CENTER_BACKGROUND_URL = "";
+      const DEFAULT_DASHBOARD_CENTER_BACKGROUND_URL = "https://i.imgur.com/EMycZzo.jpeg";
 
       function cleanDashboardBackgroundUrl(url) {
         const clean = String(url || "").trim();
@@ -5068,8 +5108,8 @@
       }
 
       function initDashboardCenterBackground() {
-        const saved = localStorage.getItem(DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY) || DEFAULT_DASHBOARD_CENTER_BACKGROUND_URL;
-        applyDashboardCenterBackground(saved);
+        const saved = localStorage.getItem(DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY);
+        applyDashboardCenterBackground(saved || DEFAULT_DASHBOARD_CENTER_BACKGROUND_URL);
       }
 
       function saveDashboardCenterBackground() {
@@ -5088,8 +5128,8 @@
 
       function clearDashboardCenterBackground() {
         localStorage.removeItem(DASHBOARD_CENTER_BACKGROUND_STORAGE_KEY);
-        applyDashboardCenterBackground("");
-        updateStatus("Background tengah dashboard dihapus.");
+        applyDashboardCenterBackground(DEFAULT_DASHBOARD_CENTER_BACKGROUND_URL);
+        updateStatus("Background tengah dashboard dikembalikan ke wallpaper utama.");
       }
 
       const staticImageData = [
