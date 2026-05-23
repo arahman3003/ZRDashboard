@@ -4834,33 +4834,16 @@
 
             <div class="admin-manager-grid">
               <div class="admin-manager-card">
-                <div class="admin-manager-title">Tambah Admin Baru</div>
-                <div class="admin-manager-sub"></div>
-                <div class="admin-form-stack">
-                  <div>
-                    <label>USERNAME ADMIN</label>
-                    <input type="text" id="newAdminUsername" placeholder="Contoh: cs01">
-                  </div>
-                  <div>
-                    <label>NAMA TAMPILAN</label>
-                    <input type="text" id="newAdminDisplayName" placeholder="Contoh: Admin CS 01">
-                  </div>
-                  <div>
-                    <label>JABATAN</label>
-                    <select id="newAdminTitle">
-                      <option value="Admin">Admin</option>
-                      <option value="Admin Master">Admin Master</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label>LINK GAMBAR PROFIL</label>
-                    <input type="text" id="newAdminAvatarUrl" placeholder="https://.../foto-admin.png">
-                  </div>
-                  <div>
-                    <label>PASSWORD ADMIN</label>
-                    <input type="password" id="newAdminPassword" placeholder="Masukkan password admin">
-                  </div>
-                  <button class="btn copy-live-btn" onclick="addDashboardAdmin()">Tambah Admin</button>
+                <div class="admin-manager-title">Admin dari Script HTML</div>
+                <div class="admin-manager-sub">
+                  Daftar admin tidak lagi ditambah dari tampilan Dashboard. Tambahkan username dan password admin di bagian script:
+                  <b>REGISTERED_ADMIN_ACCOUNTS</b>. Nama tampilan dan foto profil tetap bisa diubah sendiri oleh masing-masing admin dari menu Pengaturan.
+                </div>
+                <div class="admin-profile-hint">
+                  Format contoh:<br>
+                  username: "cs01"<br>
+                  password: "1234"<br>
+                  displayName: "ADMIN CS 01"
                 </div>
               </div>
 
@@ -4868,7 +4851,7 @@
                 <div class="admin-list-header-row">
                   <div>
                     <div class="admin-manager-title">Daftar Admin</div>
-                    <div class="admin-manager-sub">Tombol <b>Edit</b></div>
+                    <div class="admin-manager-sub">Daftar akun login dari script HTML</div>
                   </div>
                   <div class="admin-total-side-badge">
                     <div class="admin-total-icon">👥</div>
@@ -4930,22 +4913,12 @@
               </div>
 
               <div class="admin-manager-card">
-                <div class="admin-manager-title">Ubah Password</div>
-                <div class="admin-manager-sub">Masukkan password lama, lalu password baru.</div>
-                <div class="admin-form-stack">
-                  <div>
-                    <label>PASSWORD LAMA</label>
-                    <input type="password" id="currentAccountOldPassword" placeholder="Password lama">
-                  </div>
-                  <div>
-                    <label>PASSWORD BARU</label>
-                    <input type="password" id="currentAccountNewPassword" placeholder="Password baru">
-                  </div>
-                  <div>
-                    <label>ULANGI PASSWORD BARU</label>
-                    <input type="password" id="currentAccountConfirmPassword" placeholder="Ulangi password baru">
-                  </div>
-                  <button class="btn copy-live-btn" onclick="changeCurrentAccountPassword()">Simpan Password Baru</button>
+                <div class="admin-manager-title">Password Akun</div>
+                <div class="admin-manager-sub">
+                  Password login sekarang diatur dari script HTML pada <b>REGISTERED_ADMIN_ACCOUNTS</b>, supaya daftar admin tidak hilang dari dashboard.
+                </div>
+                <div class="admin-profile-hint">
+                  Untuk mengganti password, edit password admin di file HTML lalu commit ulang ke GitHub.
                 </div>
               </div>
 
@@ -5471,72 +5444,6 @@
         { title: "PERATURAN SUPER SCATER", url: "https://i.imgur.com/XEknoLl.png" },
         { title: "SALDO POKER", url: "https://i.imgur.com/DA3P8W8.png" },
         { title: "SS PROFIL GOPAY", url: "https://i.imgur.com/LxRaEYk.png" },
-        { title: "MENU DESKSTOP", url: "https://i.imgur.com/avHKL5R.jpeg" },
-        { title: "MENU MENU HISTORY", url: "https://i.imgur.com/TxV3Hpt.png" },
-        { title: "CARA BET MIX PARLAY", url: "https://i.imgur.com/4AOCuQI.jpeg" },
-        { title: "PERIODE TOGEL", url: "https://i.imgur.com/zjuh5mP.jpeg" },
-        { title: "AKUN DEMO", url: "https://i.imgur.com/GXkqZbS.jpeg" },
-        { title: "MENU ARCADE", url: "https://i.imgur.com/Nq8XJIx.png" },
-        { title: "ANGKA INDEX", url: "https://i.imgur.com/EwEqTq6.png" },
-        { title: "BUYSPIN GATES OLYMPUS SS", url: "https://i.imgur.com/1KX2lf7.jpeg" },
-        { title: "BUY SPIN LUCKY NEKO", url: "https://i.imgur.com/NzyCCuH.jpeg" },
-        { title: "BUY SPIN PINATA WINS", url: "https://i.imgur.com/T5P1fPG.jpeg" },
-        { title: "BUY SPIN SWEET BONANZA 1000", url: "https://i.imgur.com/x5DscGD.jpeg" },
-        { title: "CARA BET FAST 4D", url: "https://i.imgur.com/c1tc6Pk.png" },
-        { title: "CARA BET QUICK 2D", url: "https://i.imgur.com/3WqvRnm.png" },
-        { title: "CARA BETING 4D,3D,2D", url: "https://i.imgur.com/nYPI43F.png" },
-        { title: "CARA BETING PENGERTIAN KOLOM BET", url: "https://i.imgur.com/9jSB5BV.png" },
-        { title: "CARA MAIN TAYSEN", url: "https://i.imgur.com/GQozMVT.png" },
-        { title: "CEK BUKTI MANDIRI", url: "https://i.imgur.com/fafi8W1.jpeg" },
-        { title: "BETING COLOK BEBAS 2D", url: "https://i.imgur.com/RZMfbFL.png" },
-        { title: "BETING COLOK BEBAS", url: "https://i.imgur.com/ttw6yeE.png" },
-        { title: "BETING COLOK JITU", url: "https://i.imgur.com/jGyf2SU.png" },
-        { title: "BETING COLOK NAGA", url: "https://i.imgur.com/46PEVIA.png" },
-        { title: "DEPO BCA", url: "https://i.imgur.com/Z08XOzO.jpeg" },
-        { title: "DEPO DANA", url: "https://i.imgur.com/K3O9X1N.jpeg" },
-        { title: "DETAIL TRANSAKSI DANA", url: "https://i.imgur.com/REiS4dW.png" },
-        { title: "DEPO QRIS", url: "https://i.imgur.com/KZAbDXZ.jpeg" },
-        { title: "DEPO SHOPEEPAY", url: "https://i.imgur.com/Odm5diO.png" },
-        { title: "DETAIL GOPAY", url: "https://i.imgur.com/vcwCtNj.jpeg" },
-        { title: "QRIS JENIUS", url: "https://i.imgur.com/vVsyMqY.jpeg" },
-        { title: "FREESPIN WILD BANDITO", url: "https://i.imgur.com/mBuvkVu.jpeg" },
-        { title: "MENU HADIAH", url: "https://i.imgur.com/ClBspDa.jpeg" },
-        { title: "MENU HISTORY NOMOR", url: "https://i.imgur.com/K6uw9gH.jpeg" },
-        { title: "MENU TRANSAKSI", url: "https://i.imgur.com/0Lrn5QZ.jpeg" },
-        { title: "IDN POKER", url: "https://i.imgur.com/5r1avCn.jpeg" },
-        { title: "MENU JADWAL TOGEL", url: "https://i.imgur.com/DAER811.jpeg" },
-        { title: "CARA BETING KEMBANG KEMPIS", url: "https://i.imgur.com/g8TX4MP.png" },
-        { title: "CARA BETING ANGKA KEPUNG", url: "https://i.imgur.com/SmtgzdY.png" },
-        { title: "CARA BETING MISTIK", url: "https://i.imgur.com/RJxLhIC.png" },
-        { title: "CARA BETING ANGKA TARUNG", url: "https://i.imgur.com/aQmYk0F.png" },
-        { title: "CARA REPLAY SLOT GAME", url: "https://i.imgur.com/0icEKvl.png" },
-        { title: "CARA BETING SHIO", url: "https://i.imgur.com/gksoFut.png" },
-        { title: "CARA BETING TENGAH TEPI", url: "https://i.imgur.com/2iIv2I1.png" },
-        { title: "CARA BETING 50:50", url: "https://i.imgur.com/mTX9A1H.png" },
-        { title: "CARA BETING 50:50", url: "https://i.imgur.com/mTX9A1H.png" },
-        { title: "KEMENANGAN AKHIR PINATA", url: "https://i.imgur.com/YVbSScc.jpeg" },
-        { title: "KEMENANGAN AKHIR WILD BOUNTY ", url: "https://i.imgur.com/XZrYljd.jpeg" },   
-        { title: "LIMIT TRANSAKSI DANA", url: "https://i.imgur.com/YGVH2mW.jpeg" },
-        { title: "LIMIT TRANSAKSI OVO", url: "https://i.imgur.com/02udoeK.jpeg" },
-        { title: "MENU DAFTAR REFERRAL", url: "https://i.imgur.com/JQlBsk7.jpeg" },
-        { title: "MENU DAFTAR", url: "https://i.imgur.com/1Sduz0D.jpeg" },
-        { title: "DEPO LINKAJA", url: "https://i.imgur.com/5iWNaUG.png" },
-        { title: "MENU HISTROY BERMAIN", url: "https://i.imgur.com/CY2z37n.jpeg" },
-        { title: "MENU JADWAL BANK", url: "https://i.imgur.com/gf3jp2d.jpeg" },
-        { title: "MENU JADWAL TOGEL", url: "https://i.imgur.com/Zo9E5zT.jpeg" },
-        { title: "MENU PERIODE SPACEMAN", url: "https://i.imgur.com/8SIGt3I.jpeg" },
-        { title: "MENU PROMOSI", url: "https://i.imgur.com/fMtySg7.jpeg" },
-        { title: "MENU UBAH PASSWORD", url: "https://i.imgur.com/jBkJpl5.jpeg" },
-        { title: "PERATURAN SITUS", url: "https://i.imgur.com/LJdcquL.jpeg" },
-        { title: "POLA COLOK", url: "https://i.imgur.com/JIgckg8.png" },
-        { title: "POLA SLOT GACOR", url: "https://i.imgur.com/68Vd3dg.png" },
-        { title: "PROFIL BANKJAGO", url: "https://i.imgur.com/dYb7Qng.jpeg" },
-        { title: "PROFIL KLIK BCA", url: "https://i.imgur.com/vwjJRX9.jpeg" },
-        { title: "PROFIL JONITOGEL", url: "https://i.imgur.com/wq1R56e.png" },
-        { title: "PROFIL MANDIRI", url: "https://i.imgur.com/y5FsHDd.jpeg" },
-        { title: "PROFIL OVO", url: "https://i.imgur.com/u8F7RA4.jpeg" },
-        { title: "PROFIL SUPERBANK", url: "https://i.imgur.com/vpdJpMH.jpeg" },
-        { title: "PUTAR ULANG GATES OF OLYMPUS", url: "https://i.imgur.com/eMtjhaA.jpeg" },
         { title: "QRIS KLIK BCA", url: "https://i.imgur.com/yMArqEy.jpeg" },
         { title: "QRIS MYBCA", url: "https://i.imgur.com/8Z20Gr4.jpeg" },
         { title: "QRIS MANDIRI", url: "https://i.imgur.com/iWzKAsO.jpeg" },
@@ -5558,14 +5465,12 @@
         { title: "QRIS ISAKU", url: "https://i.imgur.com/spsv1wC.jpeg" },
         { title: "QRIS OVO", url: "https://i.imgur.com/Vlifa1p.png" },
         { title: "QRIS NEW OVO", url: "https://i.imgur.com/jXM4Dk0.png" },
-        { title: "QRIS OVO RRN", url: "https://i.imgur.com/f24BZCP.jpeg" },
         { title: "QRIS LINKAJA", url: "https://i.imgur.com/biIqBcX.jpeg" },
         { title: "QRIS DANA", url: "https://i.imgur.com/WZG2sGv.jpeg" },
         { title: "QRIS GOPAY", url: "https://i.imgur.com/O18wvMh.jpeg" },
         { title: "QRIS SAKUKU", url: "https://i.imgur.com/BWLyjAy.png" },
         { title: "QRIS SHOPEEPAY", url: "https://i.imgur.com/bH7lwUH.png" },
-        { title: "QRIS SEABANK 2", url: "https://i.imgur.com/QIjestM.jpeg" },
-        { title: "QRIS SUPERBANK ", url: "https://i.imgur.com/GVYJxbO.jpeg" }
+        { title: "QRIS SEABANK 2", url: "https://i.imgur.com/QIjestM.jpeg" }
       ];
 
 
@@ -7858,8 +7763,39 @@ function getImageCategory(item) {
         avatarUrl: ""
       };
 
+      /* =====================================================
+         DAFTAR ADMIN VIA SCRIPT HTML
+         Tambah admin cukup dari sini, bukan dari tampilan Dashboard.
+         Masing-masing admin tetap bisa ubah nama tampilan dan foto profil
+         sendiri dari menu PENGATURAN.
+      ===================================================== */
+      const REGISTERED_ADMIN_ACCOUNTS = [
+        // Contoh:
+        // {
+        //   username: "seli",
+        //   password: "1234",
+        //   displayName: "SELI SAHFITRI",
+        //   title: "Admin",
+        //   avatarUrl: ""
+        // },
+        // {
+        //   username: "cs01",
+        //   password: "1234",
+        //   displayName: "ADMIN CS 01",
+        //   title: "Admin",
+        //   avatarUrl: "https://link-foto-admin.png"
+        // }
+      ];
+
       function normalizeAdminUsername(username) {
         return String(username || "").trim().toLowerCase();
+      }
+
+      function getRegisteredAdminDefaults(username) {
+        const cleanUser = normalizeAdminUsername(username);
+        return (REGISTERED_ADMIN_ACCOUNTS || []).find(item =>
+          normalizeAdminUsername(item && item.username) === cleanUser
+        ) || null;
       }
 
       function getStoredAdminProfiles() {
@@ -7941,11 +7877,15 @@ function getImageCategory(item) {
         const profiles = getStoredAdminProfiles();
         const saved = profiles[cleanUser] || {};
         const isMaster = role === "master" || cleanUser === normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username);
-        const defaultName = isMaster ? "Asep Rahman" : String(username || "Admin");
-        const defaultTitle = isMaster ? "Admin Master" : "Admin";
+        const registered = getRegisteredAdminDefaults(cleanUser) || {};
+        const defaultName = isMaster
+          ? "Asep Rahman"
+          : String(registered.displayName || registered.label || username || "Admin");
+        const defaultTitle = isMaster ? "Admin Master" : String(registered.title || "Admin");
+        const defaultAvatar = sanitizeProfileImageUrl(registered.avatarUrl || "");
         const displayName = String(saved.displayName || defaultName).trim();
         const title = String(saved.title || defaultTitle).trim();
-        const avatarUrl = sanitizeProfileImageUrl(saved.avatarUrl || "");
+        const avatarUrl = sanitizeProfileImageUrl(saved.avatarUrl || defaultAvatar || "");
         return { displayName, title, avatarUrl };
       }
 
@@ -7976,16 +7916,21 @@ function getImageCategory(item) {
       }
 
       function getStoredAdminAccounts() {
-        try {
-          const parsed = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || "[]");
-          return Array.isArray(parsed) ? parsed.filter(item => item && item.username && item.password) : [];
-        } catch (err) {
-          return [];
-        }
+        return (REGISTERED_ADMIN_ACCOUNTS || [])
+          .map(item => ({
+            username: String(item && item.username || "").trim(),
+            password: String(item && item.password || "").trim(),
+            title: normalizeAdminTitle(item && item.title || "Admin", "Admin"),
+            avatarUrl: sanitizeProfileImageUrl(item && item.avatarUrl || ""),
+            displayName: String(item && (item.displayName || item.label) || "").trim()
+          }))
+          .filter(item => item.username && item.password);
       }
 
       function saveStoredAdminAccounts(accounts) {
-        localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(accounts || []));
+        // Admin sekarang didaftarkan lewat REGISTERED_ADMIN_ACCOUNTS di script HTML.
+        // Fungsi ini sengaja tidak menyimpan admin ke localStorage agar daftar admin tidak hilang/berubah.
+        return false;
       }
 
       function getAdminAccounts() {
@@ -7996,7 +7941,7 @@ function getImageCategory(item) {
             username,
             password: String(item.password || "").trim(),
             role: "admin",
-            label: profile.displayName || "Admin",
+            label: profile.displayName || item.displayName || "Admin",
             ...profile
           };
         }).filter(item => item.username && item.password);
@@ -8178,11 +8123,7 @@ function getImageCategory(item) {
                 <div class="admin-user-role">${escapeHtml(account.username)} • ${isMaster ? "👑 Master Admin" : escapeHtml(account.title || "Admin")}</div>
               </div>
               <div class="admin-user-actions">
-                ${isMaster ? "" : `
-                  <button class="admin-mini-btn" onclick="editDashboardAdminProfile('${escapeAttribute(account.username)}')">Edit</button>
-                  <button class="admin-mini-btn" onclick="openAdminPasswordModal('${escapeAttribute(account.username)}')">Ganti Password</button>
-                  <button class="admin-mini-btn danger" onclick="deleteDashboardAdmin('${escapeAttribute(account.username)}')">Hapus</button>
-                `}
+                <span class="admin-mini-btn" style="cursor:default;opacity:.85;">Script HTML</span>
               </div>
             </div>
           `;
@@ -8195,67 +8136,12 @@ function getImageCategory(item) {
       }
 
       function addDashboardAdmin() {
-        if (!isMasterSession()) {
-          updateStatus("Akses ditolak. Hanya master admin yang bisa menambah admin.");
-          return;
-        }
-
-        const usernameEl = document.getElementById("newAdminUsername");
-        const displayNameEl = document.getElementById("newAdminDisplayName");
-        const titleEl = document.getElementById("newAdminTitle");
-        const avatarUrlEl = document.getElementById("newAdminAvatarUrl");
-        const passwordEl = document.getElementById("newAdminPassword");
-        const username = String(usernameEl ? usernameEl.value : "").trim();
-        const displayName = String(displayNameEl ? displayNameEl.value : "").trim();
-        const title = normalizeAdminTitle(titleEl ? titleEl.value : "Admin", "Admin");
-        const avatarUrl = String(avatarUrlEl ? avatarUrlEl.value : "").trim();
-        const password = String(passwordEl ? passwordEl.value : "").trim();
-        const cleanUser = normalizeAdminUsername(username);
-
-        if (!username || !password) {
-          updateStatus("Username dan password admin wajib diisi.");
-          return;
-        }
-
-        if (password.length < 4) {
-          updateStatus("Password admin wajib diisi.");
-          return;
-        }
-
-        if (avatarUrl && !sanitizeProfileImageUrl(avatarUrl)) {
-          updateStatus("Link gambar profil harus diawali http://, https://, atau data:image/.");
-          return;
-        }
-
-        const exists = getAdminAccounts().some(account => normalizeAdminUsername(account.username) === cleanUser);
-        if (exists) {
-          updateStatus("Username admin sudah terdaftar.");
-          return;
-        }
-
-        const admins = getStoredAdminAccounts();
-        admins.push({ username, password });
-        saveStoredAdminAccounts(admins);
-        saveAdminProfile(username, "admin", {
-          displayName: displayName || username,
-          title: normalizeAdminTitle(title, "Admin"),
-          avatarUrl
-        }, { allowTitle: true });
-
-        if (usernameEl) usernameEl.value = "";
-        if (displayNameEl) displayNameEl.value = "";
-        if (titleEl) titleEl.value = "Admin";
-        if (avatarUrlEl) avatarUrlEl.value = "";
-        if (passwordEl) passwordEl.value = "";
-        renderAdminAccountList();
-        updateStatus("Admin baru berhasil ditambahkan.");
+        updateStatus("Admin sekarang didaftarkan lewat REGISTERED_ADMIN_ACCOUNTS di script HTML.");
       }
 
       function editDashboardAdminProfile(username) {
-        if (!isMasterSession()) {
-          updateStatus("Akses ditolak. Hanya master admin yang bisa edit profil admin.");
-          return;
-        }
+        updateStatus("Profil admin sekarang diubah oleh masing-masing admin dari menu Pengaturan.");
+        return;
 
         const cleanUser = normalizeAdminUsername(username);
         const account = getAdminAccounts().find(item => normalizeAdminUsername(item.username) === cleanUser);
@@ -8329,26 +8215,12 @@ function getImageCategory(item) {
       }
 
       function deleteDashboardAdmin(username) {
-        if (!isMasterSession()) {
-          updateStatus("Akses ditolak. Hanya master admin yang bisa menghapus admin.");
-          return;
-        }
-
-        const cleanUser = normalizeAdminUsername(username);
-        const admins = getStoredAdminAccounts().filter(account => normalizeAdminUsername(account.username) !== cleanUser);
-        saveStoredAdminAccounts(admins);
-        const profiles = getStoredAdminProfiles();
-        delete profiles[cleanUser];
-        saveStoredAdminProfiles(profiles);
-        renderAdminAccountList();
-        updateStatus("Admin berhasil dihapus.");
+        updateStatus("Hapus admin sekarang dilakukan dari REGISTERED_ADMIN_ACCOUNTS di script HTML.");
       }
 
       function openAdminPasswordModal(username) {
-        if (!isMasterSession()) {
-          updateStatus("Akses ditolak. Hanya master admin yang bisa mengubah password admin.");
-          return;
-        }
+        updateStatus("Password admin sekarang diatur dari REGISTERED_ADMIN_ACCOUNTS di script HTML.");
+        return;
 
         const cleanUser = normalizeAdminUsername(username);
         const account = getAdminAccounts().find(item => normalizeAdminUsername(item.username) === cleanUser);
@@ -8486,56 +8358,7 @@ function getImageCategory(item) {
       }
 
       function changeCurrentAccountPassword() {
-        const username = sessionStorage.getItem("dashboardAdminUsername") || "";
-        const role = sessionStorage.getItem("dashboardAdminRole") || "admin";
-        const oldPassEl = document.getElementById("currentAccountOldPassword");
-        const newPassEl = document.getElementById("currentAccountNewPassword");
-        const confirmEl = document.getElementById("currentAccountConfirmPassword");
-
-        const oldPassword = String(oldPassEl ? oldPassEl.value : "").trim();
-        const newPassword = String(newPassEl ? newPassEl.value : "").trim();
-        const confirmPassword = String(confirmEl ? confirmEl.value : "").trim();
-
-        if (!username) {
-          updateStatus("Akun belum terbaca. Silakan login ulang.");
-          return;
-        }
-
-        const account = verifyAdminLogin(username, oldPassword);
-        if (!account) {
-          updateStatus("Password lama salah.");
-          return;
-        }
-
-        if (!newPassword) {
-          updateStatus("Password baru wajib diisi.");
-          return;
-        }
-
-        if (newPassword !== confirmPassword) {
-          updateStatus("Konfirmasi password baru tidak sama.");
-          return;
-        }
-
-        if (role === "master") {
-          localStorage.setItem(MASTER_PASSWORD_STORAGE_KEY, newPassword);
-        } else {
-          const cleanUser = normalizeAdminUsername(username);
-          const admins = getStoredAdminAccounts().map(account => {
-            if (normalizeAdminUsername(account.username) === cleanUser) {
-              return { ...account, password: newPassword };
-            }
-            return account;
-          });
-          saveStoredAdminAccounts(admins);
-        }
-
-        if (oldPassEl) oldPassEl.value = "";
-        if (newPassEl) newPassEl.value = "";
-        if (confirmEl) confirmEl.value = "";
-
-        updateStatus("Password akun berhasil diperbarui.");
-        if (isMasterSession()) renderAdminAccountList();
+        updateStatus("Password login sekarang diatur dari REGISTERED_ADMIN_ACCOUNTS di script HTML.");
       }
 
       function downloadFullDashboardBackup() {
