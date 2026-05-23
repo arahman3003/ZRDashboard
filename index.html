@@ -2767,55 +2767,6 @@
           radial-gradient(circle at top left, rgba(59,130,246,0.24), transparent 28%),
           radial-gradient(circle at bottom right, rgba(139,92,246,0.24), transparent 32%),
           linear-gradient(135deg, #020617, #0f172a 52%, #111827);
-        overflow: hidden;
-        isolation: isolate;
-      }
-
-      .login-video-bg {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-        overflow: hidden;
-      }
-
-      .login-video-bg video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        opacity: 0.68;
-        filter: brightness(0.72) contrast(1.08) saturate(1.24);
-        transform: scale(1.02);
-      }
-
-      .login-video-bg::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        background:
-          radial-gradient(circle at 50% 38%, rgba(34,211,238,0.10), transparent 28%),
-          radial-gradient(circle at 72% 80%, rgba(139,92,246,0.22), transparent 34%),
-          linear-gradient(135deg, rgba(2,6,23,0.62), rgba(15,23,42,0.42), rgba(2,6,23,0.74));
-      }
-
-      .login-video-bg::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        background-image:
-          linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.030) 1px, transparent 1px);
-        background-size: 64px 64px;
-        opacity: 0.22;
-        animation: loginVideoGridMove 18s linear infinite;
-      }
-
-      @keyframes loginVideoGridMove {
-        from { transform: translate3d(0, 0, 0); }
-        to { transform: translate3d(64px, 64px, 0); }
       }
 
       .login-screen.show {
@@ -2823,40 +2774,49 @@
       }
 
         .login-card {
-            position: relative;
-            z-index: 3;
             width: min(94vw, 430px);
-            padding: 22px;
+            padding: 24px;
             border-radius: 30px;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.98));
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(17, 24, 39, 0.78));
+            border: 1px solid rgba(255, 255, 255, 0.16);
             box-shadow: 0 13px 28px rgb(61 148 193);
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .login-card-wallpaper,
+        .login-card-wallpaper-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 0;
+            opacity: 0.72;
+            pointer-events: none;
+        }
+
+        .login-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+              radial-gradient(circle at top, rgba(34,211,238,0.16), transparent 42%),
+              linear-gradient(180deg, rgba(2,6,23,0.28), rgba(2,6,23,0.78));
+            pointer-events: none;
+        }
+
+        .login-card > *:not(.login-card-wallpaper):not(.login-card-wallpaper-img) {
+            position: relative;
+            z-index: 2;
         }
 
         .login-logo {
-            width: 285px;
-            height: 205px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 18px;
-            padding: 0;
-            background: #000;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 2px 9px rgb(59 146 213 / 85%);
-            overflow: hidden;
+            display: none !important;
         }
-
-
-      .login-logo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        display: block;
-        border-radius: 28px;
-      }
 
       .login-card h2 {
           color: #28fcfd;
@@ -4599,56 +4559,14 @@
         transform-origin: top left !important;
       }
 
-      /* LOGIN VIDEO BACKGROUND - FULL SCREEN */
-      .login-screen {
-        position: fixed;
-        inset: 0;
-        overflow: hidden;
-        background: #020617;
-      }
-
-      .login-video-bg {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.72;
-        filter: brightness(0.72) contrast(1.12) saturate(1.18);
-        z-index: 0;
-      }
-
-      .login-video-overlay {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        background:
-          radial-gradient(circle at 50% 35%, rgba(34,211,238,0.16), transparent 28%),
-          linear-gradient(135deg, rgba(2,6,23,0.62), rgba(15,23,42,0.34), rgba(0,0,0,0.66));
-        pointer-events: none;
-      }
-
-      .login-card {
-        position: relative;
-        z-index: 2;
-      }
-
-      .login-logo {
-        display: none !important;
-      }
-
     </style>
   </head>
 
   <body>
 
     <div id="loginScreen" class="login-screen">
-      <div class="login-video-bg" aria-hidden="true">
-        <video id="loginBackgroundVideo" autoplay muted loop playsinline preload="auto">
-          <source src="https://files.catbox.moe/frkcj8.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="login-card">
+      <div class="login-card" id="loginCard">
+        <video id="loginCardWallpaperVideo" class="login-card-wallpaper" autoplay muted loop playsinline preload="metadata"></video>
         <h2>Login Dashboard</h2>
         <p></b></p>
         <div class="login-field">
@@ -5429,6 +5347,44 @@
       </main>
     </div>
     <script>
+      // Ganti link ini kalau ingin ubah wallpaper di dalam box login.
+      // Bisa pakai link .mp4 untuk wallpaper bergerak, atau link gambar .jpg/.png/.webp.
+      const LOGIN_CARD_WALLPAPER_URL = "https://files.catbox.moe/plpp10.mp4";
+
+      function applyLoginCardWallpaper() {
+        const card = document.getElementById("loginCard");
+        const video = document.getElementById("loginCardWallpaperVideo");
+        const url = String(LOGIN_CARD_WALLPAPER_URL || "").trim();
+        if (!card || !url) return;
+
+        const isVideo = /\.(mp4|webm|ogg)(\?.*)?$/i.test(url);
+
+        if (isVideo && video) {
+          video.src = url;
+          video.style.display = "block";
+          video.load();
+          const playPromise = video.play();
+          if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
+          const oldImg = card.querySelector(".login-card-wallpaper-img");
+          if (oldImg) oldImg.remove();
+        } else {
+          if (video) {
+            video.pause();
+            video.removeAttribute("src");
+            video.style.display = "none";
+          }
+          let img = card.querySelector(".login-card-wallpaper-img");
+          if (!img) {
+            img = document.createElement("img");
+            img.className = "login-card-wallpaper-img";
+            card.prepend(img);
+          }
+          img.src = url;
+          img.alt = "Wallpaper Login Card";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", applyLoginCardWallpaper);
       const dashboardData = {
         dropdown1: [],
         dropdown2: [],
@@ -8554,28 +8510,5 @@ function getImageCategory(item) {
         if (editUrlInput) editUrlInput.addEventListener("input", updateEditImagePreview);
       });
     </script>
-    <script>
-      // GANTI LINK DI BAWAH INI DENGAN LINK VIDEO .MP4 UNTUK BACKGROUND LOGIN.
-      // Contoh: const LOGIN_VIDEO_BACKGROUND_URL = "https://domain.com/video.mp4";
-      const LOGIN_VIDEO_BACKGROUND_URL = "https://files.catbox.moe/frkcj8.mp4";
-
-      (function initLoginVideoBackground() {
-        const video = document.getElementById("loginBackgroundVideo");
-        if (!video) return;
-        const cleanUrl = String(LOGIN_VIDEO_BACKGROUND_URL || "").trim();
-        if (!cleanUrl || cleanUrl === "https://files.catbox.moe/frkcj8.mp4") {
-          video.style.display = "none";
-          return;
-        }
-        const source = video.querySelector("source");
-        if (source) source.src = cleanUrl;
-        video.load();
-        const playPromise = video.play();
-        if (playPromise && typeof playPromise.catch === "function") {
-          playPromise.catch(() => {});
-        }
-      })();
-    </script>
-
   </body>
 </html>
