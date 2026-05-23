@@ -4567,10 +4567,19 @@
         transform-origin: top left !important;
       }
 
+
+
+      /* ADMIN REGISTER SCRIPT ONLY */
+      .admin-script-register-only .admin-register-card,
+      .admin-script-register-only .admin-user-actions,
+      .admin-script-register-only .admin-password-card {
+        display: none !important;
+      }
+
     </style>
   </head>
 
-  <body>
+  <body class="admin-script-register-only">
 
     <div id="loginScreen" class="login-screen">
       <div class="login-card" id="loginCard">
@@ -4833,17 +4842,34 @@
             </div>
 
             <div class="admin-manager-grid">
-              <div class="admin-manager-card">
-                <div class="admin-manager-title">Admin dari Script HTML</div>
-                <div class="admin-manager-sub">
-                  Daftar admin tidak lagi ditambah dari tampilan Dashboard. Tambahkan username dan password admin di bagian script:
-                  <b>REGISTERED_ADMIN_ACCOUNTS</b>. Nama tampilan dan foto profil tetap bisa diubah sendiri oleh masing-masing admin dari menu Pengaturan.
-                </div>
-                <div class="admin-profile-hint">
-                  Format contoh:<br>
-                  username: "cs01"<br>
-                  password: "1234"<br>
-                  displayName: "ADMIN CS 01"
+              <div class="admin-manager-card admin-register-card">
+                <div class="admin-manager-title">Tambah Admin Baru</div>
+                <div class="admin-manager-sub"></div>
+                <div class="admin-form-stack">
+                  <div>
+                    <label>USERNAME ADMIN</label>
+                    <input type="text" id="newAdminUsername" placeholder="Contoh: cs01">
+                  </div>
+                  <div>
+                    <label>NAMA TAMPILAN</label>
+                    <input type="text" id="newAdminDisplayName" placeholder="Contoh: Admin CS 01">
+                  </div>
+                  <div>
+                    <label>JABATAN</label>
+                    <select id="newAdminTitle">
+                      <option value="Admin">Admin</option>
+                      <option value="Admin Master">Admin Master</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label>LINK GAMBAR PROFIL</label>
+                    <input type="text" id="newAdminAvatarUrl" placeholder="https://.../foto-admin.png">
+                  </div>
+                  <div>
+                    <label>PASSWORD ADMIN</label>
+                    <input type="password" id="newAdminPassword" placeholder="Masukkan password admin">
+                  </div>
+                  <button class="btn copy-live-btn" onclick="addDashboardAdmin()">Tambah Admin</button>
                 </div>
               </div>
 
@@ -4851,7 +4877,7 @@
                 <div class="admin-list-header-row">
                   <div>
                     <div class="admin-manager-title">Daftar Admin</div>
-                    <div class="admin-manager-sub">Daftar akun login dari script HTML</div>
+                    <div class="admin-manager-sub">Admin didaftarkan lewat script HTML. Nama/foto profil tersimpan permanen ke Google Sheet.</div>
                   </div>
                   <div class="admin-total-side-badge">
                     <div class="admin-total-icon">👥</div>
@@ -4912,13 +4938,23 @@
                 </div>
               </div>
 
-              <div class="admin-manager-card">
-                <div class="admin-manager-title">Password Akun</div>
-                <div class="admin-manager-sub">
-                  Password login sekarang diatur dari script HTML pada <b>REGISTERED_ADMIN_ACCOUNTS</b>, supaya daftar admin tidak hilang dari dashboard.
-                </div>
-                <div class="admin-profile-hint">
-                  Untuk mengganti password, edit password admin di file HTML lalu commit ulang ke GitHub.
+              <div class="admin-manager-card admin-password-card">
+                <div class="admin-manager-title">Ubah Password</div>
+                <div class="admin-manager-sub">Masukkan password lama, lalu password baru.</div>
+                <div class="admin-form-stack">
+                  <div>
+                    <label>PASSWORD LAMA</label>
+                    <input type="password" id="currentAccountOldPassword" placeholder="Password lama">
+                  </div>
+                  <div>
+                    <label>PASSWORD BARU</label>
+                    <input type="password" id="currentAccountNewPassword" placeholder="Password baru">
+                  </div>
+                  <div>
+                    <label>ULANGI PASSWORD BARU</label>
+                    <input type="password" id="currentAccountConfirmPassword" placeholder="Ulangi password baru">
+                  </div>
+                  <button class="btn copy-live-btn" onclick="changeCurrentAccountPassword()">Simpan Password Baru</button>
                 </div>
               </div>
 
@@ -7763,44 +7799,100 @@ function getImageCategory(item) {
         avatarUrl: ""
       };
 
-      /* =====================================================
-         DAFTAR ADMIN VIA SCRIPT HTML
-         Tambah admin cukup dari sini, bukan dari tampilan Dashboard.
-         Masing-masing admin tetap bisa ubah nama tampilan dan foto profil
-         sendiri dari menu PENGATURAN.
-      ===================================================== */
-const REGISTERED_ADMIN_ACCOUNTS = [
-  {
-    username: "seli",
-    password: "1",
-    displayName: "SELI SAHFITRI",
-    title: "Admin",
-    avatarUrl: ""
-  }
-];
+      /*
+        DAFTAR ADMIN PERMANEN VIA SCRIPT HTML
+        Tambahkan admin di sini. Contoh:
+        { username: "cs01", password: "1234", displayName: "Admin CS 01", title: "Admin", avatarUrl: "" }
+
+        Catatan:
+        - Username/password admin diedit di script ini.
+        - Nama tampilan dan foto profil bisa diubah sendiri oleh admin di menu Pengaturan.
+        - Perubahan nama/foto akan disimpan permanen ke Google Sheet lewat Apps Script.
+      */
+      const REGISTERED_ADMIN_ACCOUNTS = [
+        // { username: "cs01", password: "1234", displayName: "Admin CS 01", title: "Admin", avatarUrl: "" },
+        // { username: "cs02", password: "1234", displayName: "Admin CS 02", title: "Admin", avatarUrl: "" }
+      ];
+
+      let adminProfileCache = {};
 
       function normalizeAdminUsername(username) {
         return String(username || "").trim().toLowerCase();
       }
 
-      function getRegisteredAdminDefaults(username) {
-        const cleanUser = normalizeAdminUsername(username);
-        return (REGISTERED_ADMIN_ACCOUNTS || []).find(item =>
-          normalizeAdminUsername(item && item.username) === cleanUser
-        ) || null;
-      }
-
       function getStoredAdminProfiles() {
+        if (adminProfileCache && typeof adminProfileCache === "object") return adminProfileCache;
         try {
           const parsed = JSON.parse(localStorage.getItem(ADMIN_PROFILE_STORAGE_KEY) || "{}");
-          return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+          adminProfileCache = parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+          return adminProfileCache;
         } catch (err) {
-          return {};
+          adminProfileCache = {};
+          return adminProfileCache;
         }
       }
 
       function saveStoredAdminProfiles(profiles) {
-        localStorage.setItem(ADMIN_PROFILE_STORAGE_KEY, JSON.stringify(profiles || {}));
+        adminProfileCache = profiles && typeof profiles === "object" && !Array.isArray(profiles) ? profiles : {};
+        localStorage.setItem(ADMIN_PROFILE_STORAGE_KEY, JSON.stringify(adminProfileCache));
+      }
+
+      function normalizeCloudAdminProfile(item) {
+        item = item || {};
+        const username = normalizeAdminUsername(item.username || item.USERNAME || item.user || "");
+        if (!username) return null;
+        return {
+          username,
+          displayName: String(item.displayName || item.DISPLAY_NAME || item.label || username).trim(),
+          title: normalizeAdminTitle(item.title || item.TITLE || "Admin", "Admin"),
+          avatarUrl: sanitizeProfileImageUrl(item.avatarUrl || item.AVATAR_URL || ""),
+          updatedAt: String(item.updatedAt || item.UPDATED_AT || "")
+        };
+      }
+
+      function mergeAdminProfilesFromArray(items) {
+        const profiles = getStoredAdminProfiles();
+        (Array.isArray(items) ? items : []).forEach(item => {
+          const clean = normalizeCloudAdminProfile(item);
+          if (!clean) return;
+          profiles[clean.username] = {
+            displayName: clean.displayName,
+            title: clean.title,
+            avatarUrl: clean.avatarUrl,
+            updatedAt: clean.updatedAt
+          };
+        });
+        saveStoredAdminProfiles(profiles);
+        return profiles;
+      }
+
+      async function loadAdminProfilesFromCloud() {
+        if (typeof callGasApi !== "function" || !getGasWebAppUrl()) return getStoredAdminProfiles();
+        try {
+          const data = await callGasApi("getAdminProfiles");
+          mergeAdminProfilesFromArray(data || []);
+          updateSidebarAdminProfile();
+          updateDashboardHomeProfile();
+          updateAccountSettingsUI();
+          if (isMasterSession()) renderAdminAccountList();
+          return getStoredAdminProfiles();
+        } catch (err) {
+          console.warn("Gagal memuat profil admin dari Sheet:", err);
+          return getStoredAdminProfiles();
+        }
+      }
+
+      function syncAdminProfileToCloud(username, role, profile) {
+        if (typeof callGasApi !== "function" || !getGasWebAppUrl()) return;
+        const payload = {
+          username: normalizeAdminUsername(username),
+          role: role === "master" ? "master" : "admin",
+          displayName: String(profile.displayName || username || "Admin").trim(),
+          title: normalizeAdminTitle(profile.title || (role === "master" ? "Admin Master" : "Admin"), role === "master" ? "Admin Master" : "Admin"),
+          avatarUrl: sanitizeProfileImageUrl(profile.avatarUrl || "")
+        };
+        callGasApi("upsertAdminProfile", { item: JSON.stringify(payload) })
+          .catch(err => console.warn("Gagal menyimpan profil admin ke Sheet:", err));
       }
 
       function getInitialsFromName(name, fallback = "DB") {
@@ -7864,20 +7956,17 @@ const REGISTERED_ADMIN_ACCOUNTS = [
         if (selectEl.value !== normalized) selectEl.value = fallback;
       }
 
-      function getAdminProfile(username, role = "admin") {
+      function getAdminProfile(username, role = "admin", defaults = {}) {
         const cleanUser = normalizeAdminUsername(username);
         const profiles = getStoredAdminProfiles();
         const saved = profiles[cleanUser] || {};
         const isMaster = role === "master" || cleanUser === normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username);
-        const registered = getRegisteredAdminDefaults(cleanUser) || {};
-        const defaultName = isMaster
-          ? "Asep Rahman"
-          : String(registered.displayName || registered.label || username || "Admin");
-        const defaultTitle = isMaster ? "Admin Master" : String(registered.title || "Admin");
-        const defaultAvatar = sanitizeProfileImageUrl(registered.avatarUrl || "");
+        const defaultName = String(defaults.displayName || defaults.label || (isMaster ? "Asep Rahman" : String(username || "Admin"))).trim();
+        const defaultTitle = normalizeAdminTitle(defaults.title || (isMaster ? "Admin Master" : "Admin"), isMaster ? "Admin Master" : "Admin");
+        const defaultAvatar = sanitizeProfileImageUrl(defaults.avatarUrl || "");
         const displayName = String(saved.displayName || defaultName).trim();
-        const title = String(saved.title || defaultTitle).trim();
-        const avatarUrl = sanitizeProfileImageUrl(saved.avatarUrl || defaultAvatar || "");
+        const title = normalizeAdminTitle(saved.title || defaultTitle, defaultTitle);
+        const avatarUrl = sanitizeProfileImageUrl(saved.avatarUrl || defaultAvatar);
         return { displayName, title, avatarUrl };
       }
 
@@ -7891,10 +7980,12 @@ const REGISTERED_ADMIN_ACCOUNTS = [
 
         profiles[cleanUser] = {
           displayName: String(profile.displayName || fallback.displayName).trim(),
-          title: canSaveTitle ? String(profile.title || fallback.title).trim() : fallback.title,
-          avatarUrl: sanitizeProfileImageUrl(profile.avatarUrl || fallback.avatarUrl)
+          title: canSaveTitle ? normalizeAdminTitle(profile.title || fallback.title, fallback.title) : fallback.title,
+          avatarUrl: sanitizeProfileImageUrl(profile.avatarUrl || fallback.avatarUrl),
+          updatedAt: new Date().toISOString()
         };
         saveStoredAdminProfiles(profiles);
+        syncAdminProfileToCloud(cleanUser, role, profiles[cleanUser]);
       }
 
       function getMasterAdmin() {
@@ -7908,32 +7999,35 @@ const REGISTERED_ADMIN_ACCOUNTS = [
       }
 
       function getStoredAdminAccounts() {
-        return (REGISTERED_ADMIN_ACCOUNTS || [])
+        return (Array.isArray(REGISTERED_ADMIN_ACCOUNTS) ? REGISTERED_ADMIN_ACCOUNTS : [])
           .map(item => ({
-            username: String(item && item.username || "").trim(),
-            password: String(item && item.password || "").trim(),
-            title: normalizeAdminTitle(item && item.title || "Admin", "Admin"),
-            avatarUrl: sanitizeProfileImageUrl(item && item.avatarUrl || ""),
-            displayName: String(item && (item.displayName || item.label) || "").trim()
+            username: String(item.username || "").trim(),
+            password: String(item.password || "").trim(),
+            displayName: String(item.displayName || item.label || item.username || "Admin").trim(),
+            title: normalizeAdminTitle(item.title || "Admin", "Admin"),
+            avatarUrl: sanitizeProfileImageUrl(item.avatarUrl || "")
           }))
           .filter(item => item.username && item.password);
       }
 
       function saveStoredAdminAccounts(accounts) {
-        // Admin sekarang didaftarkan lewat REGISTERED_ADMIN_ACCOUNTS di script HTML.
-        // Fungsi ini sengaja tidak menyimpan admin ke localStorage agar daftar admin tidak hilang/berubah.
-        return false;
+        updateStatus("Daftar admin sekarang dikunci dari script HTML. Edit REGISTERED_ADMIN_ACCOUNTS di index.html.");
       }
 
       function getAdminAccounts() {
         const customAdmins = getStoredAdminAccounts().map(item => {
           const username = String(item.username || "").trim();
-          const profile = getAdminProfile(username, "admin");
+          const defaults = {
+            displayName: item.displayName || username,
+            title: item.title || "Admin",
+            avatarUrl: item.avatarUrl || ""
+          };
+          const profile = getAdminProfile(username, "admin", defaults);
           return {
             username,
             password: String(item.password || "").trim(),
             role: "admin",
-            label: profile.displayName || item.displayName || "Admin",
+            label: profile.displayName || "Admin",
             ...profile
           };
         }).filter(item => item.username && item.password);
@@ -8072,6 +8166,12 @@ const REGISTERED_ADMIN_ACCOUNTS = [
           if (errorEl) errorEl.classList.remove("show");
           document.body.classList.remove("dashboard-locked");
           updateAdminAccessUI();
+          loadAdminProfilesFromCloud().then(() => {
+            updateSidebarAdminProfile();
+            updateDashboardHomeProfile();
+            updateAccountSettingsUI();
+            if (isMasterSession()) renderAdminAccountList();
+          });
           openDashboardHome();
           const loginScreen = document.getElementById("loginScreen");
           if (loginScreen) loginScreen.classList.remove("show");
@@ -8114,9 +8214,7 @@ const REGISTERED_ADMIN_ACCOUNTS = [
                 <div class="admin-user-name">${escapeHtml(account.displayName || account.username)}</div>
                 <div class="admin-user-role">${escapeHtml(account.username)} • ${isMaster ? "👑 Master Admin" : escapeHtml(account.title || "Admin")}</div>
               </div>
-              <div class="admin-user-actions">
-                <span class="admin-mini-btn" style="cursor:default;opacity:.85;">Script HTML</span>
-              </div>
+              <div class="admin-user-actions"></div>
             </div>
           `;
         }).join("");
@@ -8128,12 +8226,14 @@ const REGISTERED_ADMIN_ACCOUNTS = [
       }
 
       function addDashboardAdmin() {
-        updateStatus("Admin sekarang didaftarkan lewat REGISTERED_ADMIN_ACCOUNTS di script HTML.");
+        updateStatus("Daftar admin sekarang melalui script HTML. Edit REGISTERED_ADMIN_ACCOUNTS di index.html.");
       }
 
       function editDashboardAdminProfile(username) {
-        updateStatus("Profil admin sekarang diubah oleh masing-masing admin dari menu Pengaturan.");
-        return;
+        if (!isMasterSession()) {
+          updateStatus("Akses ditolak. Hanya master admin yang bisa edit profil admin.");
+          return;
+        }
 
         const cleanUser = normalizeAdminUsername(username);
         const account = getAdminAccounts().find(item => normalizeAdminUsername(item.username) === cleanUser);
@@ -8207,12 +8307,14 @@ const REGISTERED_ADMIN_ACCOUNTS = [
       }
 
       function deleteDashboardAdmin(username) {
-        updateStatus("Hapus admin sekarang dilakukan dari REGISTERED_ADMIN_ACCOUNTS di script HTML.");
+        updateStatus("Admin dikunci dari script HTML. Hapus admin dari REGISTERED_ADMIN_ACCOUNTS di index.html.");
       }
 
       function openAdminPasswordModal(username) {
-        updateStatus("Password admin sekarang diatur dari REGISTERED_ADMIN_ACCOUNTS di script HTML.");
-        return;
+        if (!isMasterSession()) {
+          updateStatus("Akses ditolak. Hanya master admin yang bisa mengubah password admin.");
+          return;
+        }
 
         const cleanUser = normalizeAdminUsername(username);
         const account = getAdminAccounts().find(item => normalizeAdminUsername(item.username) === cleanUser);
@@ -8247,42 +8349,7 @@ const REGISTERED_ADMIN_ACCOUNTS = [
       }
 
       function saveAdminPasswordFromModal() {
-        if (!isMasterSession()) {
-          updateStatus("Akses ditolak. Hanya master admin yang bisa mengubah password admin.");
-          return;
-        }
-
-        const username = document.getElementById("passwordAdminUsernameTarget")?.value || "";
-        const cleanUser = normalizeAdminUsername(username);
-        const password = String(document.getElementById("passwordAdminNewPassword")?.value || "").trim();
-        const confirmPassword = String(document.getElementById("passwordAdminConfirmPassword")?.value || "").trim();
-
-        if (!password) {
-          updateStatus("Password baru wajib diisi.");
-          return;
-        }
-
-        if (password.length < 4) {
-          updateStatus("Password baru minimal 4 karakter.");
-          return;
-        }
-
-        if (password !== confirmPassword) {
-          updateStatus("Konfirmasi password baru tidak sama.");
-          return;
-        }
-
-        const admins = getStoredAdminAccounts().map(account => {
-          if (normalizeAdminUsername(account.username) === cleanUser) {
-            return { ...account, password };
-          }
-          return account;
-        });
-
-        saveStoredAdminAccounts(admins);
-        closeAdminPasswordModal();
-        renderAdminAccountList();
-        updateStatus("Password admin berhasil diubah.");
+        updateStatus("Password admin dikunci dari script HTML. Ubah password di REGISTERED_ADMIN_ACCOUNTS.");
       }
 
       function updateAccountSettingsUI() {
@@ -8350,7 +8417,42 @@ const REGISTERED_ADMIN_ACCOUNTS = [
       }
 
       function changeCurrentAccountPassword() {
-        updateStatus("Password login sekarang diatur dari REGISTERED_ADMIN_ACCOUNTS di script HTML.");
+        const role = sessionStorage.getItem("dashboardAdminRole") || "admin";
+        if (role !== "master") {
+          updateStatus("Password admin dikunci dari script HTML. Minta master edit REGISTERED_ADMIN_ACCOUNTS di index.html.");
+          return;
+        }
+
+        const username = sessionStorage.getItem("dashboardAdminUsername") || "";
+        const oldPassEl = document.getElementById("currentAccountOldPassword");
+        const newPassEl = document.getElementById("currentAccountNewPassword");
+        const confirmEl = document.getElementById("currentAccountConfirmPassword");
+        const oldPassword = String(oldPassEl ? oldPassEl.value : "").trim();
+        const newPassword = String(newPassEl ? newPassEl.value : "").trim();
+        const confirmPassword = String(confirmEl ? confirmEl.value : "").trim();
+
+        if (!username) {
+          updateStatus("Akun belum terbaca. Silakan login ulang.");
+          return;
+        }
+        const account = verifyAdminLogin(username, oldPassword);
+        if (!account) {
+          updateStatus("Password lama salah.");
+          return;
+        }
+        if (!newPassword) {
+          updateStatus("Password baru wajib diisi.");
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          updateStatus("Konfirmasi password baru tidak sama.");
+          return;
+        }
+        localStorage.setItem(MASTER_PASSWORD_STORAGE_KEY, newPassword);
+        if (oldPassEl) oldPassEl.value = "";
+        if (newPassEl) newPassEl.value = "";
+        if (confirmEl) confirmEl.value = "";
+        updateStatus("Password master berhasil diperbarui.");
       }
 
       function downloadFullDashboardBackup() {
@@ -8382,8 +8484,9 @@ const REGISTERED_ADMIN_ACCOUNTS = [
         }
       });
 
-      window.onload = function() {
+      window.onload = async function() {
         initDashboardCenterBackground();
+        await loadAdminProfilesFromCloud();
         const authed = initDashboardAuth();
         initSidebar();
         initKeyboardShortcuts();
