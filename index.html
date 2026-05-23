@@ -5360,7 +5360,7 @@
       function applyLoginCardWallpaper() {
         const card = document.getElementById("loginCard");
         const video = document.getElementById("loginCardWallpaperVideo");
-        const url = String(LOGIN_CARD_WALLPAPER_URL || "").trim();
+        const url = String(LOGIN_CARD_WALLPAPER_URL || "https://i.imgur.com/XUCFkTm.jpeg").trim();
         if (!card || !url) return;
 
         const isVideo = /\.(mp4|webm|ogg)(\?.*)?$/i.test(url);
