@@ -7769,23 +7769,15 @@ function getImageCategory(item) {
          Masing-masing admin tetap bisa ubah nama tampilan dan foto profil
          sendiri dari menu PENGATURAN.
       ===================================================== */
-      const REGISTERED_ADMIN_ACCOUNTS = [
-        // Contoh:
-        // {
-        //   username: "seli",
-        //   password: "1234",
-        //   displayName: "SELI SAHFITRI",
-        //   title: "Admin",
-        //   avatarUrl: ""
-        // },
-        // {
-        //   username: "cs01",
-        //   password: "1234",
-        //   displayName: "ADMIN CS 01",
-        //   title: "Admin",
-        //   avatarUrl: "https://link-foto-admin.png"
-        // }
-      ];
+const REGISTERED_ADMIN_ACCOUNTS = [
+  {
+    username: "seli",
+    password: "1",
+    displayName: "SELI SAHFITRI",
+    title: "Admin",
+    avatarUrl: ""
+  }
+];
 
       function normalizeAdminUsername(username) {
         return String(username || "").trim().toLowerCase();
