@@ -5089,7 +5089,7 @@
             <div id="dropZone" class="image-drop-zone">
               <div class="image-drop-icon">🖼</div>
               <div class="image-drop-title">Drop gambar di sini</div>
-              <div class="image-drop-sub">atau klik tombol upload di atas. Data gambar custom tetap tersimpan di localStorage.</div>
+              <div class="image-drop-sub">atau klik tombol upload di atas. Data gambar custom tersimpan permanen di Google Sheet.</div>
               <input type="file" id="imageUploadInput" accept="image/*" multiple style="display:none">
             </div>
 
@@ -5315,7 +5315,7 @@
             <div class="image-delete-icon">🗑</div>
             <div class="image-delete-title">Hapus Gambar?</div>
             <div class="image-delete-text">
-              Gambar custom ini akan dihapus dari database localStorage. Gambar bawaan script tetap aman dan tidak ikut terhapus.
+              Gambar custom ini akan dihapus dari database Google Sheet. Gambar bawaan script tetap aman dan tidak ikut terhapus.
             </div>
 
             <div class="image-delete-card">
@@ -8417,7 +8417,7 @@ function getImageCategory(item) {
           exportedAt: new Date().toISOString(),
           app: "Dashboard Admin Backup",
           customImageData: customImageData || [],
-          note: "Backup ini menyimpan data custom lokal seperti Image Manager. Data utama PK/REK/PREDIKSI tetap berasal dari Google Sheet."
+          note: "Backup ini menyimpan data custom Image Manager. Data admin dan gambar custom sekarang tersimpan di Google Sheet."
         };
 
         const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
@@ -8461,5 +8461,494 @@ function getImageCategory(item) {
         if (editUrlInput) editUrlInput.addEventListener("input", updateEditImagePreview);
       });
     </script>
+  
+<script>
+/* =====================================================
+   CLOUD ADMIN STORAGE FIX
+   Admin + profil admin disimpan permanen ke Google Sheet via Apps Script API.
+   Ini sengaja diletakkan setelah script utama agar menimpa fungsi localStorage lama.
+===================================================== */
+(function() {
+  let adminCloudLoaded = false;
+  let adminCloudLoadingPromise = null;
+  let adminCloudAccounts = null;
+
+  function cloneAdminList(list) {
+    return JSON.parse(JSON.stringify(Array.isArray(list) ? list : []));
+  }
+
+  function normalizeCloudAdminAccount(item) {
+    item = item || {};
+    const username = String(item.username || "").trim();
+    const clean = normalizeAdminUsername(username);
+    const isMaster = String(item.role || "").toLowerCase() === "master" || clean === normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username);
+    const displayName = String(item.displayName || item.label || (isMaster ? "Asep Rahman" : username || "Admin")).trim();
+    const title = normalizeAdminTitle(item.title || (isMaster ? "Admin Master" : "Admin"), isMaster ? "Admin Master" : "Admin");
+
+    return {
+      username: username || MASTER_ADMIN_DEFAULT.username,
+      password: String(item.password || (isMaster ? MASTER_ADMIN_DEFAULT.password : "")).trim(),
+      role: isMaster ? "master" : "admin",
+      label: displayName,
+      displayName,
+      title,
+      avatarUrl: sanitizeProfileImageUrl(item.avatarUrl || ""),
+      createdAt: item.createdAt || new Date().toISOString(),
+      updatedAt: item.updatedAt || new Date().toISOString()
+    };
+  }
+
+  function mergeWithMaster(list) {
+    const normalized = (Array.isArray(list) ? list : [])
+      .map(normalizeCloudAdminAccount)
+      .filter(item => item.username && item.password);
+
+    const masterIndex = normalized.findIndex(item => item.role === "master" || normalizeAdminUsername(item.username) === normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username));
+    const defaultMaster = normalizeCloudAdminAccount({
+      username: MASTER_ADMIN_DEFAULT.username,
+      password: MASTER_ADMIN_DEFAULT.password,
+      role: "master",
+      displayName: "Asep Rahman",
+      title: "Admin Master",
+      avatarUrl: ""
+    });
+
+    if (masterIndex === -1) {
+      normalized.unshift(defaultMaster);
+    } else {
+      normalized[masterIndex] = { ...defaultMaster, ...normalized[masterIndex], role: "master" };
+      const master = normalized.splice(masterIndex, 1)[0];
+      normalized.unshift(master);
+    }
+
+    const seen = new Set();
+    return normalized.filter(item => {
+      const key = normalizeAdminUsername(item.username);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function getLocalAdminAccountsForMigration() {
+    let localAdmins = [];
+    let profiles = {};
+    try { localAdmins = JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || "[]") || []; } catch (err) { localAdmins = []; }
+    try { profiles = JSON.parse(localStorage.getItem(ADMIN_PROFILE_STORAGE_KEY) || "{}") || {}; } catch (err) { profiles = {}; }
+
+    const masterProfile = profiles[normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username)] || {};
+    const masterPassword = localStorage.getItem(MASTER_PASSWORD_STORAGE_KEY) || MASTER_ADMIN_DEFAULT.password;
+    const list = [{
+      username: MASTER_ADMIN_DEFAULT.username,
+      password: masterPassword,
+      role: "master",
+      displayName: masterProfile.displayName || "Asep Rahman",
+      title: masterProfile.title || "Admin Master",
+      avatarUrl: masterProfile.avatarUrl || ""
+    }];
+
+    (Array.isArray(localAdmins) ? localAdmins : []).forEach(item => {
+      const username = String(item.username || "").trim();
+      if (!username) return;
+      const p = profiles[normalizeAdminUsername(username)] || {};
+      list.push({
+        username,
+        password: String(item.password || "").trim(),
+        role: "admin",
+        displayName: p.displayName || username,
+        title: p.title || "Admin",
+        avatarUrl: p.avatarUrl || ""
+      });
+    });
+
+    return mergeWithMaster(list);
+  }
+
+  async function saveCloudAdminDatabase(list, showMessage = false) {
+    const payload = mergeWithMaster(list);
+    adminCloudAccounts = payload;
+    adminCloudLoaded = true;
+
+    try {
+      if (hasAppsScript()) {
+        await new Promise((resolve, reject) => {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)
+            .saveAdminAccounts(payload);
+        });
+      } else if (hasGasApi()) {
+        await callGasApi("saveAdminAccounts", { data: JSON.stringify(payload) });
+      }
+      if (showMessage) updateStatus("Database admin berhasil disimpan ke Google Sheet.");
+    } catch (err) {
+      console.error(err);
+      if (showMessage) updateStatus("Gagal menyimpan database admin ke Sheet. Data tetap tampil sementara.");
+    }
+
+    return payload;
+  }
+
+  window.preloadCloudAdminAccounts = async function(showMessage = false) {
+    if (adminCloudLoaded && adminCloudAccounts) return adminCloudAccounts;
+    if (adminCloudLoadingPromise) return adminCloudLoadingPromise;
+
+    adminCloudLoadingPromise = (async () => {
+      const localForMigration = getLocalAdminAccountsForMigration();
+
+      if (!hasAppsScript() && !hasGasApi()) {
+        adminCloudAccounts = localForMigration;
+        adminCloudLoaded = true;
+        return adminCloudAccounts;
+      }
+
+      try {
+        if (showMessage) updateStatus("Mengambil database admin dari Google Sheet...");
+        let cloud = [];
+        if (hasAppsScript()) {
+          cloud = await new Promise((resolve, reject) => {
+            google.script.run
+              .withSuccessHandler(resolve)
+              .withFailureHandler(reject)
+              .getAdminAccounts();
+          });
+        } else {
+          cloud = await callGasApi("getAdminAccounts");
+        }
+
+        let merged = mergeWithMaster(Array.isArray(cloud) ? cloud : []);
+        const cloudOnlyMaster = merged.length <= 1;
+        const localHasExtra = localForMigration.length > 1;
+
+        if (cloudOnlyMaster && localHasExtra) {
+          merged = await saveCloudAdminDatabase(localForMigration, false);
+          updateStatus("Admin lokal lama berhasil dimigrasikan ke Google Sheet.");
+        } else {
+          adminCloudAccounts = merged;
+          adminCloudLoaded = true;
+        }
+      } catch (err) {
+        console.error(err);
+        adminCloudAccounts = localForMigration;
+        adminCloudLoaded = true;
+        if (showMessage) updateStatus("Gagal mengambil admin dari Sheet, memakai data lokal sementara.");
+      } finally {
+        adminCloudLoadingPromise = null;
+      }
+
+      return adminCloudAccounts;
+    })();
+
+    return adminCloudLoadingPromise;
+  };
+
+  window.getStoredAdminAccounts = function() {
+    const accounts = adminCloudLoaded && adminCloudAccounts ? adminCloudAccounts : getLocalAdminAccountsForMigration();
+    return cloneAdminList(accounts).filter(item => item.role !== "master").map(item => ({
+      username: item.username,
+      password: item.password,
+      role: "admin"
+    }));
+  };
+
+  window.saveStoredAdminAccounts = function(accounts) {
+    const current = adminCloudLoaded && adminCloudAccounts ? cloneAdminList(adminCloudAccounts) : getLocalAdminAccountsForMigration();
+    const master = current.find(item => item.role === "master") || normalizeCloudAdminAccount(MASTER_ADMIN_DEFAULT);
+    const profiles = getStoredAdminProfiles();
+    const admins = (Array.isArray(accounts) ? accounts : []).map(item => {
+      const p = profiles[normalizeAdminUsername(item.username)] || {};
+      const old = current.find(acc => normalizeAdminUsername(acc.username) === normalizeAdminUsername(item.username)) || {};
+      return normalizeCloudAdminAccount({ ...old, ...p, ...item, role: "admin" });
+    });
+    saveCloudAdminDatabase([master, ...admins], false);
+  };
+
+  window.getStoredAdminProfiles = function() {
+    const accounts = adminCloudLoaded && adminCloudAccounts ? adminCloudAccounts : getLocalAdminAccountsForMigration();
+    const map = {};
+    (accounts || []).forEach(item => {
+      map[normalizeAdminUsername(item.username)] = {
+        displayName: item.displayName || item.label || item.username,
+        title: item.title || (item.role === "master" ? "Admin Master" : "Admin"),
+        avatarUrl: item.avatarUrl || ""
+      };
+    });
+    return map;
+  };
+
+  window.saveStoredAdminProfiles = function(profiles) {
+    const current = adminCloudLoaded && adminCloudAccounts ? cloneAdminList(adminCloudAccounts) : getLocalAdminAccountsForMigration();
+    const updated = current.map(item => {
+      const p = (profiles || {})[normalizeAdminUsername(item.username)] || {};
+      return normalizeCloudAdminAccount({ ...item, ...p });
+    });
+    saveCloudAdminDatabase(updated, false);
+  };
+
+  window.getMasterAdmin = function() {
+    const accounts = adminCloudLoaded && adminCloudAccounts ? adminCloudAccounts : getLocalAdminAccountsForMigration();
+    const master = accounts.find(item => item.role === "master" || normalizeAdminUsername(item.username) === normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username));
+    return normalizeCloudAdminAccount(master || MASTER_ADMIN_DEFAULT);
+  };
+
+  window.getAdminProfile = function(username, role = "admin") {
+    const cleanUser = normalizeAdminUsername(username);
+    const accounts = adminCloudLoaded && adminCloudAccounts ? adminCloudAccounts : getLocalAdminAccountsForMigration();
+    const account = accounts.find(item => normalizeAdminUsername(item.username) === cleanUser);
+    if (account) {
+      return {
+        displayName: account.displayName || account.label || account.username,
+        title: account.title || (account.role === "master" ? "Admin Master" : "Admin"),
+        avatarUrl: sanitizeProfileImageUrl(account.avatarUrl || "")
+      };
+    }
+    const isMaster = role === "master" || cleanUser === normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username);
+    return {
+      displayName: isMaster ? "Asep Rahman" : String(username || "Admin"),
+      title: isMaster ? "Admin Master" : "Admin",
+      avatarUrl: ""
+    };
+  };
+
+  window.saveAdminProfile = function(username, role, profile, options = {}) {
+    const cleanUser = normalizeAdminUsername(username);
+    if (!cleanUser) return;
+    const current = adminCloudLoaded && adminCloudAccounts ? cloneAdminList(adminCloudAccounts) : getLocalAdminAccountsForMigration();
+    const isMaster = role === "master" || cleanUser === normalizeAdminUsername(MASTER_ADMIN_DEFAULT.username);
+    const index = current.findIndex(item => normalizeAdminUsername(item.username) === cleanUser);
+    const old = index >= 0 ? current[index] : {
+      username,
+      password: isMaster ? MASTER_ADMIN_DEFAULT.password : "",
+      role: isMaster ? "master" : "admin"
+    };
+    const canSaveTitle = options.allowTitle === true || isMaster;
+    const updated = normalizeCloudAdminAccount({
+      ...old,
+      displayName: String(profile.displayName || old.displayName || old.username).trim(),
+      title: canSaveTitle ? String(profile.title || old.title || (isMaster ? "Admin Master" : "Admin")).trim() : old.title,
+      avatarUrl: sanitizeProfileImageUrl(profile.avatarUrl || ""),
+      updatedAt: new Date().toISOString()
+    });
+    if (index >= 0) current[index] = updated;
+    else current.push(updated);
+    saveCloudAdminDatabase(current, false);
+  };
+
+  window.getAdminAccounts = function() {
+    const accounts = adminCloudLoaded && adminCloudAccounts ? adminCloudAccounts : getLocalAdminAccountsForMigration();
+    return mergeWithMaster(accounts);
+  };
+
+  window.verifyAdminLogin = function(username, password) {
+    const cleanUser = normalizeAdminUsername(username);
+    const cleanPass = String(password || "").trim();
+    return getAdminAccounts().find(account =>
+      normalizeAdminUsername(account.username) === cleanUser &&
+      String(account.password) === cleanPass
+    ) || null;
+  };
+
+  window.doAdminLogin = async function() {
+    const userEl = document.getElementById("loginUsername");
+    const passEl = document.getElementById("loginPassword");
+    const errorEl = document.getElementById("loginError");
+    const username = String(userEl ? userEl.value : "").trim();
+    const password = String(passEl ? passEl.value : "").trim();
+
+    await preloadCloudAdminAccounts(true);
+    const account = verifyAdminLogin(username, password);
+
+    if (account) {
+      sessionStorage.setItem("dashboardAdminLoggedIn", "yes");
+      sessionStorage.setItem("dashboardAdminUsername", account.username);
+      sessionStorage.setItem("dashboardAdminRole", account.role || "admin");
+      if (errorEl) errorEl.classList.remove("show");
+      document.body.classList.remove("dashboard-locked");
+      updateAdminAccessUI();
+      openDashboardHome();
+      const loginScreen = document.getElementById("loginScreen");
+      if (loginScreen) loginScreen.classList.remove("show");
+      showAppLoading("Mengambil data dari Google Sheet...");
+      const alreadyLoaded = (dashboardData.dropdown1 || []).length || (dashboardData.dropdown2 || []).length || (dashboardData.dropdown3 || []).length;
+      if (!alreadyLoaded) loadAllData();
+      else setTimeout(() => hideAppLoading(), 700);
+      updateStatus(`Login berhasil sebagai ${account.displayName || account.username}`);
+      return;
+    }
+
+    if (errorEl) errorEl.classList.add("show");
+  };
+
+  window.addDashboardAdmin = async function() {
+    if (!isMasterSession()) return updateStatus("Akses ditolak. Hanya master admin yang bisa menambah admin.");
+    await preloadCloudAdminAccounts(true);
+
+    const usernameEl = document.getElementById("newAdminUsername");
+    const displayNameEl = document.getElementById("newAdminDisplayName");
+    const titleEl = document.getElementById("newAdminTitle");
+    const avatarUrlEl = document.getElementById("newAdminAvatarUrl");
+    const passwordEl = document.getElementById("newAdminPassword");
+    const username = String(usernameEl ? usernameEl.value : "").trim();
+    const displayName = String(displayNameEl ? displayNameEl.value : "").trim();
+    const title = normalizeAdminTitle(titleEl ? titleEl.value : "Admin", "Admin");
+    const avatarUrl = String(avatarUrlEl ? avatarUrlEl.value : "").trim();
+    const password = String(passwordEl ? passwordEl.value : "").trim();
+    const cleanUser = normalizeAdminUsername(username);
+
+    if (!username || !password) return updateStatus("Username dan password admin wajib diisi.");
+    if (password.length < 4) return updateStatus("Password admin minimal 4 karakter.");
+    if (avatarUrl && !sanitizeProfileImageUrl(avatarUrl)) return updateStatus("Link gambar profil harus diawali http://, https://, atau data:image/.");
+    if (getAdminAccounts().some(account => normalizeAdminUsername(account.username) === cleanUser)) return updateStatus("Username admin sudah terdaftar.");
+
+    const updated = [...getAdminAccounts(), normalizeCloudAdminAccount({ username, password, role: "admin", displayName: displayName || username, title, avatarUrl })];
+    await saveCloudAdminDatabase(updated, true);
+
+    if (usernameEl) usernameEl.value = "";
+    if (displayNameEl) displayNameEl.value = "";
+    if (titleEl) titleEl.value = "Admin";
+    if (avatarUrlEl) avatarUrlEl.value = "";
+    if (passwordEl) passwordEl.value = "";
+    renderAdminAccountList();
+    updateAdminTotalBadges();
+    updateStatus("Admin baru berhasil ditambahkan permanen ke Google Sheet.");
+  };
+
+  window.saveEditedDashboardAdminProfile = async function() {
+    if (!isMasterSession()) return updateStatus("Akses ditolak. Hanya master admin yang bisa edit profil admin.");
+    await preloadCloudAdminAccounts(true);
+
+    const username = document.getElementById("editAdminUsernameTarget")?.value || "";
+    const displayName = String(document.getElementById("editAdminDisplayName")?.value || "").trim();
+    const title = normalizeAdminTitle(document.getElementById("editAdminTitle")?.value || "Admin", "Admin");
+    const avatarUrl = String(document.getElementById("editAdminAvatarUrl")?.value || "").trim();
+    if (!username || !displayName) return updateStatus("Nama tampilan admin wajib diisi.");
+    if (avatarUrl && !sanitizeProfileImageUrl(avatarUrl)) return updateStatus("Link gambar profil harus diawali http://, https://, atau data:image/.");
+
+    const updated = getAdminAccounts().map(account => normalizeAdminUsername(account.username) === normalizeAdminUsername(username)
+      ? normalizeCloudAdminAccount({ ...account, displayName, title, avatarUrl, updatedAt: new Date().toISOString() })
+      : account
+    );
+    await saveCloudAdminDatabase(updated, true);
+    closeAdminProfileEditModal();
+    renderAdminAccountList();
+    updateSidebarAdminProfile();
+    updateDashboardHomeProfile();
+    updateStatus("Profil dan jabatan admin berhasil diperbarui permanen.");
+  };
+
+  window.deleteDashboardAdmin = async function(username) {
+    if (!isMasterSession()) return updateStatus("Akses ditolak. Hanya master admin yang bisa menghapus admin.");
+    await preloadCloudAdminAccounts(true);
+    const cleanUser = normalizeAdminUsername(username);
+    const updated = getAdminAccounts().filter(account => account.role === "master" || normalizeAdminUsername(account.username) !== cleanUser);
+    await saveCloudAdminDatabase(updated, true);
+    renderAdminAccountList();
+    updateAdminTotalBadges();
+    updateStatus("Admin berhasil dihapus permanen dari Google Sheet.");
+  };
+
+  window.saveAdminPasswordFromModal = async function() {
+    if (!isMasterSession()) return updateStatus("Akses ditolak. Hanya master admin yang bisa mengubah password admin.");
+    await preloadCloudAdminAccounts(true);
+
+    const username = document.getElementById("passwordAdminUsernameTarget")?.value || "";
+    const password = String(document.getElementById("passwordAdminNewPassword")?.value || "").trim();
+    const confirmPassword = String(document.getElementById("passwordAdminConfirmPassword")?.value || "").trim();
+    if (!password) return updateStatus("Password baru wajib diisi.");
+    if (password.length < 4) return updateStatus("Password baru minimal 4 karakter.");
+    if (password !== confirmPassword) return updateStatus("Konfirmasi password baru tidak sama.");
+
+    const updated = getAdminAccounts().map(account => normalizeAdminUsername(account.username) === normalizeAdminUsername(username)
+      ? normalizeCloudAdminAccount({ ...account, password, updatedAt: new Date().toISOString() })
+      : account
+    );
+    await saveCloudAdminDatabase(updated, true);
+    closeAdminPasswordModal();
+    renderAdminAccountList();
+    updateStatus("Password admin berhasil diubah permanen.");
+  };
+
+  window.saveCurrentAccountProfile = async function() {
+    const username = sessionStorage.getItem("dashboardAdminUsername") || "";
+    const role = sessionStorage.getItem("dashboardAdminRole") || "admin";
+    await preloadCloudAdminAccounts(true);
+
+    const nameEl = document.getElementById("currentAccountDisplayName");
+    const titleEl = document.getElementById("currentAccountTitle");
+    const avatarEl = document.getElementById("currentAccountAvatarUrl");
+    const displayName = String(nameEl ? nameEl.value : "").trim();
+    const title = normalizeAdminTitle(titleEl ? titleEl.value : (role === "master" ? "Admin Master" : "Admin"), role === "master" ? "Admin Master" : "Admin");
+    const avatarUrl = String(avatarEl ? avatarEl.value : "").trim();
+    if (!username) return updateStatus("Akun belum terbaca. Silakan login ulang.");
+    if (!displayName) return updateStatus("Nama tampilan wajib diisi.");
+    if (avatarUrl && !sanitizeProfileImageUrl(avatarUrl)) return updateStatus("Link gambar profil harus diawali http://, https://, atau data:image/.");
+
+    const updated = getAdminAccounts().map(account => normalizeAdminUsername(account.username) === normalizeAdminUsername(username)
+      ? normalizeCloudAdminAccount({ ...account, displayName, title: role === "master" ? title : account.title, avatarUrl, updatedAt: new Date().toISOString() })
+      : account
+    );
+    await saveCloudAdminDatabase(updated, true);
+    updateSidebarAdminProfile();
+    updateDashboardHomeProfile();
+    updateAccountSettingsUI();
+    if (isMasterSession()) renderAdminAccountList();
+    updateStatus("Profil admin berhasil diperbarui permanen.");
+  };
+
+  window.changeCurrentAccountPassword = async function() {
+    const username = sessionStorage.getItem("dashboardAdminUsername") || "";
+    await preloadCloudAdminAccounts(true);
+    const oldPassEl = document.getElementById("currentAccountOldPassword");
+    const newPassEl = document.getElementById("currentAccountNewPassword");
+    const confirmEl = document.getElementById("currentAccountConfirmPassword");
+    const oldPassword = String(oldPassEl ? oldPassEl.value : "").trim();
+    const newPassword = String(newPassEl ? newPassEl.value : "").trim();
+    const confirmPassword = String(confirmEl ? confirmEl.value : "").trim();
+
+    if (!username) return updateStatus("Akun belum terbaca. Silakan login ulang.");
+    if (!verifyAdminLogin(username, oldPassword)) return updateStatus("Password lama salah.");
+    if (!newPassword) return updateStatus("Password baru wajib diisi.");
+    if (newPassword !== confirmPassword) return updateStatus("Konfirmasi password baru tidak sama.");
+
+    const updated = getAdminAccounts().map(account => normalizeAdminUsername(account.username) === normalizeAdminUsername(username)
+      ? normalizeCloudAdminAccount({ ...account, password: newPassword, updatedAt: new Date().toISOString() })
+      : account
+    );
+    await saveCloudAdminDatabase(updated, true);
+
+    if (oldPassEl) oldPassEl.value = "";
+    if (newPassEl) newPassEl.value = "";
+    if (confirmEl) confirmEl.value = "";
+    updateStatus("Password akun berhasil diperbarui permanen.");
+    if (isMasterSession()) renderAdminAccountList();
+  };
+
+  const originalRenderAdminAccountList = window.renderAdminAccountList;
+  window.renderAdminAccountList = function() {
+    if (!adminCloudLoaded) {
+      preloadCloudAdminAccounts(false).then(() => {
+        originalRenderAdminAccountList();
+        updateAdminTotalBadges();
+      });
+    }
+    return originalRenderAdminAccountList();
+  };
+
+  const originalWindowOnload = window.onload;
+  window.onload = async function() {
+    await preloadCloudAdminAccounts(false);
+    if (typeof originalWindowOnload === "function") originalWindowOnload();
+    setTimeout(async () => {
+      await preloadCloudAdminAccounts(false);
+      updateSidebarAdminProfile();
+      updateDashboardHomeProfile();
+      updateAdminTotalBadges();
+      if (isMasterSession()) renderAdminAccountList();
+      if (typeof loadImagesFromSheet === "function") loadImagesFromSheet(false);
+    }, 500);
+  };
+})();
+</script>
+
   </body>
 </html>
