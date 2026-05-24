@@ -8447,10 +8447,21 @@ function getImageCategory(item) {
       function updateDashboardHomeProfile() {
         const username = sessionStorage.getItem("dashboardAdminUsername") || "";
         const role = sessionStorage.getItem("dashboardAdminRole") || "admin";
-        const profile = username ? getAdminProfile(username, role) : { displayName: "Dashboard Admin", title: "Admin", avatarUrl: "" };
+      
+        const cleanUser = normalizeAdminUsername(username);
+        const account = getAdminAccounts().find(item =>
+          normalizeAdminUsername(item.username) === cleanUser
+        );
+      
+        const profile = account || (
+          username
+            ? getAdminProfile(username, role)
+            : { displayName: "Dashboard Admin", title: "Admin", avatarUrl: "" }
+        );
+      
         const displayName = profile.displayName || username || "Dashboard Admin";
         const roleLabel = getShortAdminRoleLabel(profile, role);
-
+      
         const topName = document.getElementById("dashboardTopName");
         const topRole = document.getElementById("dashboardTopRoleBadge");
         const welcomeName = document.getElementById("dashboardWelcomeName");
@@ -8458,8 +8469,7 @@ function getImageCategory(item) {
         const profileTitle = document.getElementById("dashboardProfileTitle");
         const profileSubtitle = document.getElementById("dashboardProfileSubtitle");
         const profileRoleCard = document.getElementById("dashboardProfileRoleCard");
-        const totalUsers = document.getElementById("dashboardTotalUsers");
-
+      
         if (topName) topName.textContent = displayName;
         if (topRole) topRole.textContent = roleLabel;
         if (welcomeName) welcomeName.textContent = displayName;
@@ -8467,8 +8477,9 @@ function getImageCategory(item) {
         if (profileTitle) profileTitle.textContent = displayName;
         if (profileSubtitle) profileSubtitle.textContent = username ? `Username: ${username}` : "Akun yang sedang login";
         if (profileRoleCard) profileRoleCard.textContent = profile.title || (role === "master" ? "Admin Master" : "Admin");
+      
         updateAdminTotalBadges();
-
+      
         applyAvatarToElement(document.getElementById("dashboardTopAvatar"), profile, role === "master" ? "AR" : "DB");
         applyAvatarToElement(document.getElementById("dashboardWelcomeAvatar"), profile, role === "master" ? "AR" : "DB");
       }
