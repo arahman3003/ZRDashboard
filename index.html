@@ -4658,46 +4658,6 @@
         background: rgba(15, 23, 42, 0.76) !important;
       }
 
-      #dashboardSection .marquee-container {
-        width: 100%;
-        height: 58px;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        background: linear-gradient(180deg, #171717, #111111);
-        border-top: 1px solid rgba(255,255,255,0.05);
-        border-bottom: 2px solid rgba(255,255,255,0.20);
-        box-shadow: 0 10px 26px rgba(0,0,0,0.35);
-      }
-
-      #dashboardSection .marquee-track {
-        display: inline-flex;
-        align-items: center;
-        width: max-content;
-        min-width: max-content;
-        flex: 0 0 auto;
-        will-change: transform;
-        animation: dashboardMarqueeMove 24s linear infinite;
-      }
-
-      #dashboardSection .marquee-track span {
-        color: #ffffff;
-        font-size: 19px;
-        font-weight: 900;
-        letter-spacing: 0.55px;
-        white-space: nowrap;
-        text-shadow: 0 0 9px rgba(255,255,255,0.82), 0 2px 8px rgba(0,0,0,0.90);
-      }
-
-      #dashboardSection .marquee-container:hover .marquee-track {
-        animation-play-state: paused;
-      }
-
-      @keyframes dashboardMarqueeMove {
-        0% { transform: translateX(100vw); }
-        100% { transform: translateX(-100%); }
-      }
-
       #dashboardSection .dashboard-home-panel .dashboard-welcome-card {
         display: flex !important;
         margin: 22px 26px 26px !important;
@@ -4839,12 +4799,6 @@
                   <strong id="dashboardTopName" class="dashboard-admin-name">Dashboard Admin</strong>
                   <span id="dashboardTopRoleBadge" class="dashboard-role-badge">CS</span>
                 </div>
-              </div>
-            </div>
-
-            <div class="marquee-container">
-              <div class="marquee-track">
-                <span>Kesuksesan tidak datang begitu saja; ia adalah hasil dari kerja keras, dan konsistensi</span>
               </div>
             </div>
 
