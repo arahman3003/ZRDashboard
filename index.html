@@ -139,7 +139,7 @@
       }
 
     .panel {
-        background: rgb(22 34 47);
+        background: rgb(11 18 37 / 53%);
         border: 1px solid var(--border);
         border-radius: 24px;
         padding: 20px;
@@ -4603,6 +4603,159 @@
         display: none !important;
       }
 
+
+
+      /* =========================
+         DASHBOARD TOPBAR + RUNNING MARQUEE UPDATE
+         Tampilan dashboard dibuat seperti contoh: topbar kanan, marquee berjalan, welcome card putih.
+      ========================= */
+      #dashboardSection .dashboard-home-panel {
+        background: #f7f7f7 !important;
+        color: #2b2b2b !important;
+        border-radius: 0 0 22px 22px !important;
+        overflow: hidden !important;
+        box-shadow: var(--shadow) !important;
+        min-height: calc(100vh - 44px) !important;
+      }
+
+      #dashboardSection .dashboard-topbar {
+        height: 86px !important;
+        padding: 0 34px !important;
+        background: #0f1420 !important;
+        border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+        border-radius: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+      }
+
+      #dashboardSection .dashboard-topbar-spacer {
+        flex: 1 1 auto;
+      }
+
+      #dashboardSection .dashboard-topbar-welcome {
+        display: none !important;
+      }
+
+      #dashboardSection .dashboard-topbar .dashboard-admin-pill {
+        display: inline-flex !important;
+      }
+
+      #dashboardSection .dashboard-topbar-right {
+        width: auto !important;
+        margin-left: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 16px !important;
+        flex: 0 0 auto !important;
+      }
+
+      #dashboardSection .dashboard-admin-pill {
+        min-width: 315px !important;
+        height: 58px !important;
+        border-radius: 16px !important;
+        background: rgba(15, 23, 42, 0.76) !important;
+      }
+
+      #dashboardSection .marquee-container {
+        width: 100%;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        background: linear-gradient(180deg, #171717, #111111);
+        border-top: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 2px solid rgba(255,255,255,0.20);
+        box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+      }
+
+      #dashboardSection .marquee-track {
+        display: inline-flex;
+        align-items: center;
+        gap: 72px;
+        min-width: max-content;
+        animation: dashboardMarqueeMove 22s linear infinite;
+      }
+
+      #dashboardSection .marquee-track span {
+        color: #ffffff;
+        font-size: 19px;
+        font-weight: 900;
+        letter-spacing: 0.55px;
+        white-space: nowrap;
+        text-shadow: 0 0 9px rgba(255,255,255,0.82), 0 2px 8px rgba(0,0,0,0.90);
+      }
+
+      #dashboardSection .marquee-container:hover .marquee-track {
+        animation-play-state: paused;
+      }
+
+      @keyframes dashboardMarqueeMove {
+        0% { transform: translateX(100vw); }
+        100% { transform: translateX(-50%); }
+      }
+
+      #dashboardSection .dashboard-home-panel .dashboard-welcome-card {
+        display: flex !important;
+        margin: 22px 26px 26px !important;
+        min-height: 132px !important;
+        align-items: center !important;
+        padding: 24px 34px !important;
+        border-radius: 0 22px 22px 0 !important;
+        background:
+          linear-gradient(116deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.96) 42%, rgba(245,245,245,0.84) 42.2%, rgba(255,255,255,0.95) 60%, rgba(245,245,245,0.84) 60.2%, rgba(255,255,255,0.96) 100%) !important;
+        border-left: 8px solid #111 !important;
+        border-right: 8px solid #111 !important;
+        box-shadow: 0 12px 34px rgba(0,0,0,0.10) !important;
+        backdrop-filter: none !important;
+      }
+
+      #dashboardSection .dashboard-welcome-text,
+      #dashboardSection .dashboard-welcome-text span,
+      #dashboardSection .dashboard-welcome-text strong {
+        color: #2a2a2a !important;
+        text-shadow: none !important;
+        font-size: 22px !important;
+        font-weight: 900 !important;
+      }
+
+      #dashboardSection .dashboard-wave {
+        width: 54px !important;
+        height: 54px !important;
+        font-size: 32px !important;
+        border-radius: 18px !important;
+        background: rgba(241,245,249,0.95) !important;
+        color: inherit !important;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.12) !important;
+      }
+
+      @media (max-width: 860px) {
+        #dashboardSection .dashboard-topbar {
+          height: auto !important;
+          min-height: 86px !important;
+          padding: 14px 18px !important;
+        }
+
+        #dashboardSection .dashboard-topbar-right {
+          flex-wrap: wrap !important;
+          justify-content: flex-start !important;
+        }
+
+        #dashboardSection .dashboard-admin-pill {
+          min-width: min(100%, 315px) !important;
+        }
+
+        #dashboardSection .marquee-track span {
+          font-size: 15px !important;
+        }
+
+        #dashboardSection .dashboard-home-panel .dashboard-welcome-card {
+          margin: 16px 14px 22px !important;
+          padding: 20px 18px !important;
+        }
+      }
+
     </style>
   </head>
 
@@ -4668,7 +4821,31 @@
         <section id="dashboardSection" class="section active">
           <div class="dashboard-home-panel">
             <div class="dashboard-topbar">
-              <div class="dashboard-topbar-welcome">
+              <div class="dashboard-topbar-spacer"></div>
+              <div class="dashboard-topbar-right">
+                <div class="dashboard-clock-pill">
+                  <span>🕘</span>
+                  <strong id="dashboardTopClock">00:00:00</strong>
+                  <span class="dashboard-date-separator">|</span>
+                  <span id="dashboardTopDate">20 Mei 2026</span>
+                </div>
+                <div class="dashboard-admin-pill">
+                  <div id="dashboardTopAvatar" class="dashboard-admin-avatar">DB</div>
+                  <strong id="dashboardTopName" class="dashboard-admin-name">Dashboard Admin</strong>
+                  <span id="dashboardTopRoleBadge" class="dashboard-role-badge">CS</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="marquee-container">
+              <div class="marquee-track">
+                <span>Jangan menunggu mood buat kerja, bisa-bisa pensiun duluan. Jangan ngeluh, ingat kamu kerja untuk masa depan !!!</span>
+                <span>Jangan menunggu mood buat kerja, bisa-bisa pensiun duluan. Jangan ngeluh, ingat kamu kerja untuk masa depan !!!</span>
+              </div>
+            </div>
+
+            <div class="dashboard-welcome-card">
+              <div class="dashboard-welcome-left">
                 <div class="dashboard-wave">👋</div>
                 <div class="dashboard-welcome-text">
                   <span>Welcome,</span>
@@ -4677,17 +4854,7 @@
                   <em id="dashboardWelcomeRole">CS</em>
                 </div>
               </div>
-              <div class="dashboard-topbar-right">
-                <div class="dashboard-clock-pill">
-                  <span>🕘</span>
-                  <strong id="dashboardTopClock">00:00:00</strong>
-                  <span class="dashboard-date-separator">|</span>
-                  <span id="dashboardTopDate">20 Mei 2026</span>
-                </div>
-              </div>
             </div>
-
-
           </div>
         </section>
 
