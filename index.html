@@ -1629,6 +1629,15 @@
         white-space: pre-wrap;
       }
 
+      .syair-position-textarea {
+        min-height: 230px;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 12px;
+        line-height: 1.45;
+        white-space: pre;
+        color: #dbeafe;
+      }
+
       .syair-info-box {
         background: rgba(255,255,255,0.05);
         border: 1px solid rgba(255,255,255,0.07);
@@ -2133,28 +2142,28 @@
       }
 
       .syair-v2 .syair-new-colok-grid {
-        left: 5.4%;
-        top: 52.3%;
-        width: 26.5%;
-        height: 20.6%;
+        left: var(--colok-area-left, 5.4%);
+        top: var(--colok-area-top, 52.3%);
+        width: var(--colok-area-width, 26.5%);
+        height: var(--colok-area-height, 20.6%);
         display: block;
         background: transparent !important;
       }
 
       .syair-v2 .syair-new-angka-grid {
-        left: 73.0%;
-        top: 54.1%;
-        width: 16.2%;
-        height: 16.8%;
+        left: var(--angka-area-left, 73.0%);
+        top: var(--angka-area-top, 54.1%);
+        width: var(--angka-area-width, 16.2%);
+        height: var(--angka-area-height, 16.8%);
         display: block;
         background: transparent !important;
       }
 
       .syair-v2 .syair-new-bbfs-grid {
-        left: 28.0%;
-        top: 75.15%;
-        width: 43.6%;
-        height: 6.8%;
+        left: var(--bbfs-area-left, 28.0%);
+        top: var(--bbfs-area-top, 75.15%);
+        width: var(--bbfs-area-width, 43.6%);
+        height: var(--bbfs-area-height, 6.8%);
         display: block;
         background: transparent !important;
       }
@@ -2193,38 +2202,38 @@
       }
 
       .syair-v2 .syair-new-colok-grid .num-cell {
-        font-size: 66px !important;
+        font-size: var(--colok-font-size, 66px) !important;
       }
 
-      .syair-v2 .syair-new-colok-grid .v2-colok-cell-1 { left: 19%; top: 31%; }
-      .syair-v2 .syair-new-colok-grid .v2-colok-cell-2 { left: 81%; top: 31%; }
-      .syair-v2 .syair-new-colok-grid .v2-colok-cell-3 { left: 19%; top: 79%; }
-      .syair-v2 .syair-new-colok-grid .v2-colok-cell-4 { left: 81%; top: 79%; }
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-1 { left: var(--colok-1-x, 19%); top: var(--colok-1-y, 31%); }
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-2 { left: var(--colok-2-x, 81%); top: var(--colok-2-y, 31%); }
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-3 { left: var(--colok-3-x, 19%); top: var(--colok-3-y, 79%); }
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-4 { left: var(--colok-4-x, 81%); top: var(--colok-4-y, 79%); }
 
       .syair-v2 .syair-new-angka-grid .num-cell {
-        font-size: 58px !important;
+        font-size: var(--angka-font-size, 58px) !important;
       }
-      .syair-v2 .syair-new-angka-grid .v2-angka-cell-1 { left: 28%; top: 30%; }
-      .syair-v2 .syair-new-angka-grid .v2-angka-cell-2 { left: 72%; top: 30%; }
-      .syair-v2 .syair-new-angka-grid .v2-angka-cell-3 { left: 28%; top: 78%; }
-      .syair-v2 .syair-new-angka-grid .v2-angka-cell-4 { left: 72%; top: 78%; }
+      .syair-v2 .syair-new-angka-grid .v2-angka-cell-1 { left: var(--angka-1-x, 28%); top: var(--angka-1-y, 30%); }
+      .syair-v2 .syair-new-angka-grid .v2-angka-cell-2 { left: var(--angka-2-x, 72%); top: var(--angka-2-y, 30%); }
+      .syair-v2 .syair-new-angka-grid .v2-angka-cell-3 { left: var(--angka-3-x, 28%); top: var(--angka-3-y, 78%); }
+      .syair-v2 .syair-new-angka-grid .v2-angka-cell-4 { left: var(--angka-4-x, 72%); top: var(--angka-4-y, 78%); }
 
       .syair-v2 .syair-new-bbfs-grid .num-cell {
-        font-size: 50px !important;
-        top: 50%;
+        font-size: var(--bbfs-font-size, 50px) !important;
+        top: var(--bbfs-y, 50%);
       }
-      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-1 { left: 8.5%; }
-      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-2 { left: 25.0%; }
-      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-3 { left: 41.5%; }
-      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-4 { left: 58.0%; }
-      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-5 { left: 74.5%; }
-      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-6 { left: 91.0%; }
+      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-1 { left: var(--bbfs-1-x, 8.5%); }
+      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-2 { left: var(--bbfs-2-x, 25.0%); }
+      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-3 { left: var(--bbfs-3-x, 41.5%); }
+      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-4 { left: var(--bbfs-4-x, 58.0%); }
+      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-5 { left: var(--bbfs-5-x, 74.5%); }
+      .syair-v2 .syair-new-bbfs-grid .v2-bbfs-cell-6 { left: var(--bbfs-6-x, 91.0%); }
 
       .syair-v2 .syair-new-poem-box {
-        left: 19.2%;
-        top: 86.9%;
-        width: 61.7%;
-        height: 9.8%;
+        left: var(--syair-box-left, 19.2%);
+        top: var(--syair-box-top, 86.9%);
+        width: var(--syair-box-width, 61.7%);
+        height: var(--syair-box-height, 9.8%);
         padding: 18px 42px 14px;
         display: flex;
         align-items: flex-start;
@@ -5411,6 +5420,15 @@
                 </div>
 
                 <div class="syair-group">
+                  <label class="syair-label">CSS POSISI ANGKA</label>
+                  <textarea id="syairPositionCss" class="syair-position-textarea" spellcheck="false" placeholder="Ubah nilai persen untuk geser posisi angka..."></textarea>
+                  <div style="display:grid;grid-template-columns:1fr 100px;gap:10px;margin-top:10px;">
+                    <button class="btn secondary" type="button" onclick="resetSyairPositionCss()">Reset Posisi</button>
+                    <button class="btn copy-live-btn" type="button" onclick="renderSyairPreview()">Terapkan</button>
+                  </div>
+                </div>
+
+                <div class="syair-group">
                   <label class="syair-label">SHIO</label>
                   <select id="syairShioSelect">
                     <option value="">Kosong</option>
@@ -6070,6 +6088,86 @@ function saveCustomImages() {
         AYAM: "https://i.imgur.com/tHJhLGr.png",
         KUDA: "https://i.imgur.com/RwNYRjr.png"
       };
+
+      const DEFAULT_SYAIR_POSITION_CSS = `
+/* AREA UTAMA */
+--colok-area-left: 5.4%;
+--colok-area-top: 52.3%;
+--colok-area-width: 26.5%;
+--colok-area-height: 20.6%;
+
+--angka-area-left: 73.0%;
+--angka-area-top: 54.1%;
+--angka-area-width: 16.2%;
+--angka-area-height: 16.8%;
+
+--bbfs-area-left: 28.0%;
+--bbfs-area-top: 75.15%;
+--bbfs-area-width: 43.6%;
+--bbfs-area-height: 6.8%;
+
+--syair-box-left: 19.2%;
+--syair-box-top: 86.9%;
+--syair-box-width: 61.7%;
+--syair-box-height: 9.8%;
+
+/* COLOK BEBAS: 4 angka sekitar kompas */
+--colok-1-x: 19%;
+--colok-1-y: 31%;
+--colok-2-x: 81%;
+--colok-2-y: 31%;
+--colok-3-x: 19%;
+--colok-3-y: 79%;
+--colok-4-x: 81%;
+--colok-4-y: 79%;
+
+/* ANGKA MAIN: 4 kotak kanan */
+--angka-1-x: 28%;
+--angka-1-y: 30%;
+--angka-2-x: 72%;
+--angka-2-y: 30%;
+--angka-3-x: 28%;
+--angka-3-y: 78%;
+--angka-4-x: 72%;
+--angka-4-y: 78%;
+
+/* BBFS: 6 kotak bawah */
+--bbfs-1-x: 8.5%;
+--bbfs-2-x: 25.0%;
+--bbfs-3-x: 41.5%;
+--bbfs-4-x: 58.0%;
+--bbfs-5-x: 74.5%;
+--bbfs-6-x: 91.0%;
+--bbfs-y: 50%;
+
+/* UKURAN FONT */
+--colok-font-size: 66px;
+--angka-font-size: 58px;
+--bbfs-font-size: 50px;
+--syair-font-size: 30px;
+`.trim();
+
+      function resetSyairPositionCss() {
+        const el = document.getElementById("syairPositionCss");
+        if (el) el.value = DEFAULT_SYAIR_POSITION_CSS;
+        renderSyairPreview();
+        updateStatus("Posisi angka direset");
+      }
+
+      function getSyairPositionStyle() {
+        const el = document.getElementById("syairPositionCss");
+        const raw = el ? (el.value || "") : "";
+        const safeLines = String(raw)
+          .split(/\n+/)
+          .map(line => line.replace(/\/\*.*?\*\//g, "").trim())
+          .filter(line => line.startsWith("--") && line.includes(":"))
+          .map(line => {
+            const cleaned = line.endsWith(";") ? line : `${line};`;
+            return cleaned.replace(/[<>{}]/g, "");
+          });
+
+        return safeLines.join(" ");
+      }
 
       const SYAIR_TEMPLATE_URL = "https://i.imgur.com/0xik08S.jpeg";
       const SYAIR_TEMPLATE_MAP = {
@@ -7884,13 +7982,14 @@ function getImageCategory(item) {
         const syairLinesClass = `lines-${Math.min(Math.max(syairData.lineCount || 1, 1), 8)}`;
         const shioUrl = shio ? (shioImageMap[shio] || "") : "";
         const n = currentSyairNumbers;
+        const syairPositionStyle = getSyairPositionStyle();
         const angkaMain = [...(n.angkaMain || []), ...(n.jitu || [])].slice(0, 4);
         const bbfs = (n.bbfs || []).slice(0, 6);
         const colok = (n.colok || []).slice(0, 4);
 
         preview.innerHTML = `
           <div class="syair-preview-stage" id="syairPreviewStage">
-          <div class="syair-card syair-v2 template-${escapeAttribute(templateKey)}" id="syairCardCapture">
+          <div class="syair-card syair-v2 template-${escapeAttribute(templateKey)}" id="syairCardCapture" style="${escapeAttribute(syairPositionStyle)}">
             <img class="syair-bg" src="${escapeAttribute(templateUrl)}" alt="Template Syair">
 
             <div class="syair-overlay syair-new-shio-box">
@@ -7934,11 +8033,13 @@ function getImageCategory(item) {
         const marketEl = document.getElementById("syairMarketSelect");
         const shioEl = document.getElementById("syairShioSelect");
         const templateEl = document.getElementById("syairTemplateSelect");
+        const positionEl = document.getElementById("syairPositionCss");
         const textEl = document.getElementById("syairTextArea");
 
         if (dateEl) dateEl.value = getTodayInputValue();
         if (marketEl) marketEl.value = "BANGKOK";
         if (templateEl) templateEl.value = "black";
+        if (positionEl) positionEl.value = DEFAULT_SYAIR_POSITION_CSS;
         if (shioEl) shioEl.value = "";
         if (textEl) textEl.value = "";
 
@@ -8241,14 +8342,17 @@ function getImageCategory(item) {
         const marketEl = document.getElementById("syairMarketSelect");
         const shioEl = document.getElementById("syairShioSelect");
         const templateEl = document.getElementById("syairTemplateSelect");
+        const positionEl = document.getElementById("syairPositionCss");
         const textEl = document.getElementById("syairTextArea");
 
         if (dateEl && !dateEl.value) dateEl.value = getTodayInputValue();
+        if (positionEl && !positionEl.value.trim()) positionEl.value = DEFAULT_SYAIR_POSITION_CSS;
         if (marketEl) marketEl.addEventListener("change", renderSyairPreview);
         if (templateEl) templateEl.addEventListener("change", renderSyairPreview);
         if (shioEl) shioEl.addEventListener("change", renderSyairPreview);
         if (dateEl) dateEl.addEventListener("change", renderSyairPreview);
         if (textEl) textEl.addEventListener("input", renderSyairPreview);
+        if (positionEl) positionEl.addEventListener("input", renderSyairPreview);
 
         currentSyairNumbers = generateSyairNumbers();
         renderSyairPreview();
