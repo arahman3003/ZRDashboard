@@ -6039,15 +6039,36 @@ function saveCustomImages() {
         `).join("");
       }
 
+      function showPkcsResultByIndex(index, withFlash = true) {
+        const selected = filteredPkcsData[index];
+        const resultEl = document.getElementById("pkcsResultBox");
+        const rightBox = document.querySelector(".pkcs-box-right");
+
+        if (!selected) {
+          if (resultEl) resultEl.textContent = "";
+          return;
+        }
+
+        selectedPkcsIndex = index;
+        if (resultEl) resultEl.textContent = selected[1] || "-";
+
+        if (withFlash && rightBox) {
+          rightBox.classList.remove("flash");
+          void rightBox.offsetWidth;
+          rightBox.classList.add("flash");
+        }
+      }
+
       function filterPkcsList() {
         const input = document.getElementById("pkcsSearchInput");
         const keyword = normalizeSearchText(input ? input.value : "");
         const source = dashboardData.dropdown1 || [];
-        selectedPkcsIndex = -1;
 
         if (!keyword) {
           filteredPkcsData = [];
+          selectedPkcsIndex = -1;
           showPkcsPrompt();
+          showPkcsResultByIndex(-1, false);
           return;
         }
 
@@ -6057,33 +6078,22 @@ function saveCustomImages() {
           return parts.every(part => colA.includes(part));
         });
 
+        if (!filteredPkcsData.length) {
+          selectedPkcsIndex = -1;
+          renderPkcsList(filteredPkcsData);
+          showPkcsResultByIndex(-1, false);
+          return;
+        }
+
+        selectedPkcsIndex = 0;
         renderPkcsList(filteredPkcsData);
+        showPkcsResultByIndex(0, true);
       }
 
       function selectPkcsItem(index) {
-        const selected = filteredPkcsData[index];
-        if (!selected) return;
-
-        const resultEl = document.getElementById("pkcsResultBox");
-        const searchInput = document.getElementById("pkcsSearchInput");
-        const rightBox = document.querySelector(".pkcs-box-right");
-
-        if (resultEl) resultEl.textContent = selected[1] || "-";
-
-        if (rightBox) {
-          rightBox.classList.remove("flash");
-          void rightBox.offsetWidth;
-          rightBox.classList.add("flash");
-        }
-
-        if (searchInput) {
-          searchInput.value = "";
-          searchInput.blur();
-        }
-
-        filteredPkcsData = [];
-        selectedPkcsIndex = -1;
-        showPkcsPrompt();
+        if (!filteredPkcsData[index]) return;
+        showPkcsResultByIndex(index, true);
+        renderPkcsList(filteredPkcsData);
       }
 
       function copyPkcsResult() {
