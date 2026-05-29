@@ -4698,6 +4698,84 @@
         box-shadow: 0 10px 22px rgba(0,0,0,0.12) !important;
       }
 
+
+
+      /* PROFILE MENU DI NAMA DASHBOARD */
+      .dashboard-profile-menu-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .dashboard-profile-trigger {
+        border: 1px solid rgba(255,255,255,0.06);
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .dashboard-profile-trigger:hover {
+        background: rgba(30,41,59,0.92) !important;
+        transform: translateY(-1px);
+      }
+
+      .dashboard-profile-menu {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        min-width: 245px;
+        padding: 10px;
+        border-radius: 16px;
+        background: rgba(15,23,42,0.97);
+        border: 1px solid rgba(255,255,255,0.14);
+        box-shadow: 0 22px 50px rgba(0,0,0,0.48);
+        display: none;
+        z-index: 999;
+      }
+
+      .dashboard-profile-menu.show {
+        display: block;
+      }
+
+      .dashboard-profile-menu button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 14px;
+        border: none;
+        border-radius: 12px;
+        background: transparent;
+        color: #e5e7eb;
+        font-size: 14px;
+        font-weight: 900;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .dashboard-profile-menu button:hover {
+        background: rgba(255,255,255,0.09);
+        color: #ffffff;
+      }
+
+      .dashboard-profile-menu button span {
+        width: 20px;
+        display: inline-flex;
+        justify-content: center;
+      }
+
+      body:not(.master-mode) .dashboard-profile-menu .master-only {
+        display: none !important;
+      }
+
+      @media (max-width: 860px) {
+        .dashboard-profile-menu {
+          left: 0;
+          right: auto;
+          min-width: min(88vw, 245px);
+        }
+      }
+
       @media (max-width: 860px) {
         #dashboardSection .dashboard-topbar {
           height: auto !important;
@@ -4772,8 +4850,6 @@
           <button class="nav-btn" data-target="prediksiSection">PREDIKSI</button>
           <button class="nav-btn" data-target="syairSection">SYAIR TOGEL</button>
           <button class="nav-btn" data-target="gambarSection">GAMBAR</button>
-          <button class="nav-btn" data-target="accountSettingsSection">PENGATURAN</button>
-          <button class="nav-btn master-only" id="adminManagerNavBtn" data-target="adminManagerSection">ADMIN</button>
         </div>
 
         <div class="sidebar-footer">
@@ -4797,10 +4873,18 @@
                   <span class="dashboard-date-separator">|</span>
                   <span id="dashboardTopDate">20 Mei 2026</span>
                 </div>
-                <div class="dashboard-admin-pill">
-                  <div id="dashboardTopAvatar" class="dashboard-admin-avatar">DB</div>
-                  <strong id="dashboardTopName" class="dashboard-admin-name">Dashboard Admin</strong>
-                  <span id="dashboardTopRoleBadge" class="dashboard-role-badge">CS</span>
+                <div class="dashboard-profile-menu-wrap">
+                  <button type="button" class="dashboard-admin-pill dashboard-profile-trigger" onclick="toggleDashboardProfileMenu(event)">
+                    <div id="dashboardTopAvatar" class="dashboard-admin-avatar">DB</div>
+                    <strong id="dashboardTopName" class="dashboard-admin-name">Dashboard Admin</strong>
+                    <span id="dashboardTopRoleBadge" class="dashboard-role-badge">CS</span>
+                  </button>
+                  <div id="dashboardProfileMenu" class="dashboard-profile-menu">
+                    <button type="button" onclick="openCurrentProfileSettings()"><span>👤</span> Ganti Profile</button>
+                    <button type="button" onclick="openCurrentPasswordSettings()"><span>🔑</span> Ganti Password</button>
+                    <button type="button" class="master-only" onclick="openAdminManagerFromProfileMenu()"><span>👑</span> Admin Manager</button>
+                    <button type="button" onclick="logoutAdminFromProfileMenu()"><span>↪</span> Logout</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -8760,6 +8844,57 @@ function getImageCategory(item) {
       function saveAdminPasswordFromModal() {
         updateStatus("Password admin dikunci dari script HTML. Ubah password di REGISTERED_ADMIN_ACCOUNTS.");
       }
+
+
+      function closeDashboardProfileMenu() {
+        const menu = document.getElementById("dashboardProfileMenu");
+        if (menu) menu.classList.remove("show");
+      }
+
+      function toggleDashboardProfileMenu(event) {
+        if (event) event.stopPropagation();
+        const menu = document.getElementById("dashboardProfileMenu");
+        if (!menu) return;
+        menu.classList.toggle("show");
+      }
+
+      function openCurrentProfileSettings() {
+        closeDashboardProfileMenu();
+        setActiveSection("accountSettingsSection");
+        updateAccountSettingsUI();
+        setTimeout(() => document.getElementById("currentAccountDisplayName")?.focus(), 80);
+      }
+
+      function openCurrentPasswordSettings() {
+        closeDashboardProfileMenu();
+        setActiveSection("accountSettingsSection");
+        updateAccountSettingsUI();
+        setTimeout(() => document.getElementById("currentAccountOldPassword")?.focus(), 80);
+      }
+
+      function openAdminManagerFromProfileMenu() {
+        closeDashboardProfileMenu();
+        if (!isMasterSession()) {
+          updateStatus("Akses ditolak. Menu Admin hanya untuk Admin Master.");
+          return;
+        }
+        setActiveSection("adminManagerSection");
+        renderAdminAccountList();
+      }
+
+      function logoutAdminFromProfileMenu() {
+        closeDashboardProfileMenu();
+        logoutAdmin();
+      }
+
+      document.addEventListener("click", function(event) {
+        const wrap = document.querySelector(".dashboard-profile-menu-wrap");
+        if (wrap && !wrap.contains(event.target)) closeDashboardProfileMenu();
+      });
+
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") closeDashboardProfileMenu();
+      });
 
       function updateAccountSettingsUI() {
         const username = sessionStorage.getItem("dashboardAdminUsername") || "-";
