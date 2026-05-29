@@ -6091,9 +6091,25 @@ function saveCustomImages() {
       }
 
       function selectPkcsItem(index) {
-        if (!filteredPkcsData[index]) return;
+        const selected = filteredPkcsData[index];
+        if (!selected) return;
+
+        // Klik keyword tetap seperti mode lama:
+        // hasil tampil, daftar keyword disembunyikan, tetapi kolom search tetap berisi keyword terakhir.
         showPkcsResultByIndex(index, true);
-        renderPkcsList(filteredPkcsData);
+
+        const input = document.getElementById("pkcsSearchInput");
+        const listEl = document.getElementById("pkcsKeywordList");
+
+        if (input) {
+          input.value = selected[0] || input.value;
+          input.blur();
+        }
+
+        filteredPkcsData = [];
+        selectedPkcsIndex = -1;
+
+        if (listEl) listEl.innerHTML = "";
       }
 
       function copyPkcsResult() {
