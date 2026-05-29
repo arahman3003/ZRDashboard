@@ -2116,10 +2116,10 @@
       }
 
       .syair-v2 .syair-new-shio-box {
-        left: 38.1%;
-        top: 27.5%;
-        width: 23.8%;
-        height: 24.5%;
+        left: 38.3%;
+        top: 28.0%;
+        width: 23.2%;
+        height: 22.8%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2133,40 +2133,46 @@
       }
 
       .syair-v2 .syair-new-colok-grid {
-        left: 14.0%;
-        top: 57.8%;
-        width: 17.0%;
-        height: 8.6%;
+        left: 8.9%;
+        top: 52.8%;
+        width: 22.8%;
+        height: 17.6%;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
+        grid-template-rows: repeat(2, 1fr);
+        gap: 16px 28px;
         align-items: center;
         justify-items: center;
+        place-items: center;
         background: transparent !important;
       }
 
       .syair-v2 .syair-new-angka-grid {
-        left: 73.1%;
-        top: 52.7%;
-        width: 15.3%;
-        height: 17.3%;
+        left: 72.9%;
+        top: 52.9%;
+        width: 16.0%;
+        height: 18.4%;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(2, 1fr);
-        gap: 11px 13px;
+        gap: 10px 12px;
+        align-items: center;
+        justify-items: center;
+        place-items: center;
         background: transparent !important;
       }
 
       .syair-v2 .syair-new-bbfs-grid {
-        left: 28.3%;
-        top: 75.2%;
-        width: 43.2%;
-        height: 7.0%;
+        left: 28.1%;
+        top: 74.8%;
+        width: 43.8%;
+        height: 7.5%;
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        gap: 13px;
+        gap: 10px;
         align-items: center;
         justify-items: center;
+        place-items: center;
         background: transparent !important;
       }
 
@@ -2203,12 +2209,38 @@
       }
 
       .syair-v2 .syair-new-colok-grid .num-cell {
-        font-size: 66px !important;
+        font-size: 70px !important;
+        width: auto !important;
+        height: auto !important;
+      }
+
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-1 {
+        align-self: start;
+        justify-self: start;
+        padding-left: 8px;
+      }
+
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-2 {
+        align-self: start;
+        justify-self: end;
+        padding-right: 8px;
+      }
+
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-3 {
+        align-self: end;
+        justify-self: start;
+        padding-left: 8px;
+      }
+
+      .syair-v2 .syair-new-colok-grid .v2-colok-cell-4 {
+        align-self: end;
+        justify-self: end;
+        padding-right: 8px;
       }
 
       .syair-v2 .syair-new-angka-grid .num-cell,
       .syair-v2 .syair-new-bbfs-grid .num-cell {
-        font-size: 58px !important;
+        font-size: 54px !important;
       }
 
       .syair-v2 .syair-new-poem-box {
@@ -5404,6 +5436,7 @@
                 <div class="syair-group">
                   <label class="syair-label">SHIO</label>
                   <select id="syairShioSelect">
+                    <option value="">Kosong</option>
                     <option value="KUDA">Kuda</option>
                     <option value="ULAR">Ular</option>
                     <option value="NAGA">Naga</option>
@@ -7720,7 +7753,7 @@ function getImageCategory(item) {
         return {
           bb: [randTwoDigit(), randTwoDigit(), randTwoDigit(), randTwoDigit(), randTwoDigit()],
           arah: [randDigit(), randDigit(), randDigit(), randDigit()],
-          colok: [randDigit(), randDigit()],
+          colok: [randDigit(), randDigit(), randDigit(), randDigit()],
           jaga: [randDigit(), randDigit()],
           ekor: [randDigit(), randDigit()],
           kepala: [randDigit(), randDigit()],
@@ -7865,18 +7898,18 @@ function getImageCategory(item) {
 
         const templateKey = getElValue("syairTemplateSelect", "black");
         const templateUrl = SYAIR_TEMPLATE_MAP[templateKey] || SYAIR_TEMPLATE_MAP.black || SYAIR_TEMPLATE_URL;
-        const shio = getElValue("syairShioSelect", "NAGA");
+        const shio = getElValue("syairShioSelect", "");
         const rawSyairText = getElValue("syairTextArea", "");
         const syairData = rawSyairText.trim()
           ? formatSyairText(rawSyairText)
           : { html: "", lineCount: 1 };
         const syairText = syairData.html;
         const syairLinesClass = `lines-${Math.min(Math.max(syairData.lineCount || 1, 1), 8)}`;
-        const shioUrl = shioImageMap[shio] || "";
+        const shioUrl = shio ? (shioImageMap[shio] || "") : "";
         const n = currentSyairNumbers;
         const angkaMain = [...(n.angkaMain || []), ...(n.jitu || [])].slice(0, 4);
         const bbfs = (n.bbfs || []).slice(0, 6);
-        const colok = (n.colok || []).slice(0, 2);
+        const colok = (n.colok || []).slice(0, 4);
 
         preview.innerHTML = `
           <div class="syair-preview-stage" id="syairPreviewStage">
@@ -7929,7 +7962,7 @@ function getImageCategory(item) {
         if (dateEl) dateEl.value = getTodayInputValue();
         if (marketEl) marketEl.value = "BANGKOK";
         if (templateEl) templateEl.value = "black";
-        if (shioEl) shioEl.value = "NAGA";
+        if (shioEl) shioEl.value = "";
         if (textEl) textEl.value = "";
 
         currentSyairNumbers = generateSyairNumbers();
@@ -7989,7 +8022,7 @@ function getImageCategory(item) {
 
       function copySyairText() {
         const header = getElValue("syairCopyText");
-        const shio = getElValue("syairShioSelect", "NAGA");
+        const shio = getElValue("syairShioSelect", "") || "-";
         const text = getElValue("syairTextArea", "");
         const finalText = `${header}\nSHIO: ${shio}\n\n${text}`;
 
