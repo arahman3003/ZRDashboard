@@ -9015,7 +9015,7 @@ function getImageCategory(item) {
   .new-syair-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
   .new-date-cover,.new-market-cover,.new-date-text,.new-poem-text,.new-colok-nums,.new-angka-main-nums,.new-bbfs-nums,.new-market-logo-box,.new-shio-logo-box,.new-shio-title-banner{position:absolute;}
   .new-date-cover,.new-market-cover{z-index:4;pointer-events:none;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,220,140,.10),0 0 10px rgba(0,0,0,.18);}
-  .new-date-cover{left:35.8%;top:14.0%;width:28.4%;height:3.55%;background:radial-gradient(circle at 50% 35%,rgba(255,188,42,.10),rgba(0,0,0,.78) 46%,rgba(0,0,0,.42) 100%);border-radius:999px;box-shadow:none;}
+  .new-date-cover{left:30.6%;top:13.85%;width:38.8%;height:4.9%;background:radial-gradient(ellipse at center,rgba(7,7,7,.98) 0%,rgba(7,7,7,.95) 58%,rgba(7,7,7,.58) 82%,rgba(7,7,7,0) 100%);border-radius:999px;box-shadow:none;}
   .new-market-cover{left:35.8%;top:20.2%;width:28.5%;height:3.15%;background:linear-gradient(180deg,rgba(16,16,16,.98) 0%,rgba(5,5,5,.98) 100%);}
   .new-date-text,.new-poem-text,.new-colok-nums,.new-angka-main-nums,.new-bbfs-nums,.new-market-logo-box,.new-shio-logo-box,.new-shio-title-banner{z-index:5;}
   .new-date-text{left:31%;top:13.25%;width:38%;height:4.2%;display:flex;align-items:center;justify-content:center;text-align:center;color:#ffd769;font-family:Georgia,'Times New Roman',serif;font-weight:900;font-size:36px;letter-spacing:1px;text-shadow:0 3px 0 #3b2200,0 0 14px rgba(255,188,42,.78);}
@@ -9028,7 +9028,12 @@ function getImageCategory(item) {
   .new-shio-title-banner::before{left:-13px;clip-path:polygon(100% 0,0 50%,100% 100%);border-right:none;}
   .new-shio-title-banner::after{right:-13px;clip-path:polygon(0 0,100% 50%,0 100%);border-left:none;}
   .new-shio-title-banner span{display:block;color:#ffe69a;font-family:Georgia,'Times New Roman',serif;font-weight:900;font-size:27px;letter-spacing:1px;text-shadow:0 2px 0 #2c1500,0 0 12px rgba(255,195,73,.65);}
-  .new-colok-nums{left:8.5%;top:49.7%;width:21.5%;height:6.2%;display:flex;align-items:center;justify-content:center;gap:10px;color:#ffe07a;font-family:Impact,'Arial Black',sans-serif;font-size:42px;letter-spacing:1px;text-shadow:0 4px 0 #200,0 0 13px rgba(255,191,0,.75);}
+  .new-colok-nums{left:8.7%;top:44.7%;width:19.2%;height:14.2%;color:#ffe07a;font-family:Impact,'Arial Black',sans-serif;font-size:48px;letter-spacing:1px;text-shadow:0 4px 0 #200,0 0 13px rgba(255,191,0,.78);}
+  .new-colok-nums span{position:absolute;display:block;min-width:34px;text-align:center;}
+  .new-colok-nums span:nth-child(1){left:26%;top:15%;}
+  .new-colok-nums span:nth-child(2){right:24%;top:15%;}
+  .new-colok-nums span:nth-child(3){left:26%;bottom:14%;}
+  .new-colok-nums span:nth-child(4){right:24%;bottom:14%;}
   .new-angka-main-nums{left:72.7%;top:46.2%;width:16.1%;height:12%;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);gap:11px 16px;align-items:center;justify-items:center;color:#ffe17b;font-family:Impact,'Arial Black',sans-serif;font-size:42px;text-shadow:0 3px 0 #180f00,0 0 10px rgba(255,191,0,.75);}
   .new-bbfs-nums{left:26.9%;top:69.7%;width:45.8%;height:5.3%;display:grid;grid-template-columns:repeat(6,1fr);gap:9px;align-items:center;justify-items:center;color:#ffe17b;font-family:Impact,'Arial Black',sans-serif;font-size:37px;text-shadow:0 3px 0 #180f00,0 0 10px rgba(255,191,0,.75);}
   .new-poem-text{left:17.2%;top:81.9%;width:65.6%;height:13.2%;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;color:#ffd96c;font-family:Georgia,'Times New Roman',serif;font-weight:900;font-size:29px;line-height:1.18;letter-spacing:.2px;text-shadow:0 3px 0 #251600,0 0 12px rgba(255,190,42,.45);padding:0 24px;overflow:hidden;}
@@ -9252,6 +9257,7 @@ Untung besar siap berjaya.`]
   }
   function fillSelect(sel,map){ if(!sel) return; sel.innerHTML=Object.keys(map).map(k=>`<option value="${k}">${k.charAt(0)+k.slice(1).toLowerCase()}</option>`).join(''); }
   function renderNums(el,nums){ if(el) el.innerHTML = nums.map(n=>`<span>${n}</span>`).join(''); }
+  function renderColok(el,nums){ if(!el) return; el.innerHTML = (nums||[]).slice(0,4).map(n=>`<span>${n}</span>`).join(''); }
   function scaleCard(){
     const wrap = document.querySelector('.syair-new-preview-wrap'); const card = id('newSyairCard');
     if(!wrap||!card) return; const available = Math.max(620, wrap.clientWidth - 34); const scale = Math.min(1, available / 1254); card.style.transform = `scale(${scale})`; card.style.marginBottom = `${1254*(scale-1)}px`;
@@ -9265,7 +9271,7 @@ Untung besar siap berjaya.`]
     if(marketImg) marketImg.src = pasarMap[state.pasar] || pasarMap.BANGKOK;
     if(shioImg) shioImg.src = shioMap[state.shio] || shioMap.NAGA;
     if(shioTitle) shioTitle.textContent = `SHIO ${state.shio}`;
-    renderNums(id('newColokNums'), state.colok); renderNums(id('newAngkaMainNums'), state.main); renderNums(id('newBbfsNums'), state.bbfs);
+    renderColok(id('newColokNums'), state.colok); renderNums(id('newAngkaMainNums'), state.main); renderNums(id('newBbfsNums'), state.bbfs);
     const list = syairMap[state.shio] || syairMap.NAGA; if(poem) poem.textContent = list[state.poemIndex % list.length];
     requestAnimationFrame(scaleCard);
   }
