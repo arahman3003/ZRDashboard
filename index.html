@@ -9028,9 +9028,10 @@ function getImageCategory(item) {
   .new-syair-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
   .new-date-cover,.new-market-cover,.new-shio-top-cover,.new-shio-image-cover,.white-clean-cover,.new-date-text,.new-poem-text,.new-colok-nums,.new-angka-main-nums,.new-bbfs-nums,.new-market-logo-box,.new-shio-logo-box,.new-shio-title-banner{position:absolute;}
   .new-date-cover,.new-market-cover{z-index:4;pointer-events:none;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,220,140,.10),0 0 10px rgba(0,0,0,.18);}
-  .new-date-cover{left:30.6%;top:13.85%;width:38.8%;height:4.9%;background:radial-gradient(ellipse at center,rgba(7,7,7,.98) 0%,rgba(7,7,7,.95) 58%,rgba(7,7,7,.58) 82%,rgba(7,7,7,0) 100%);border-radius:999px;box-shadow:none;}
+  .new-date-cover{left:29.7%;top:13.25%;width:40.6%;height:6.0%;background:radial-gradient(ellipse at center,rgba(0,0,0,1) 0%,rgba(0,0,0,.99) 63%,rgba(0,0,0,.86) 82%,rgba(0,0,0,0) 100%);border-radius:999px;box-shadow:0 0 10px rgba(0,0,0,.35);z-index:5;}
   .new-market-cover{left:35.8%;top:20.2%;width:28.5%;height:3.15%;background:linear-gradient(180deg,rgba(16,16,16,.98) 0%,rgba(5,5,5,.98) 100%);}
-  .new-date-text,.new-poem-text,.new-colok-nums,.new-angka-main-nums,.new-bbfs-nums,.new-market-logo-box,.new-shio-logo-box,.new-shio-title-banner{z-index:5;}
+  .new-poem-text,.new-colok-nums,.new-angka-main-nums,.new-bbfs-nums,.new-market-logo-box,.new-shio-logo-box,.new-shio-title-banner{z-index:5;}
+  .new-date-text{z-index:6;}
   .new-shio-top-cover,.new-shio-image-cover{display:none;z-index:4;pointer-events:none;}
   .white-clean-cover{display:none;z-index:4;pointer-events:none;}
   .new-date-text{left:31%;top:13.25%;width:38%;height:4.2%;display:flex;align-items:center;justify-content:center;text-align:center;color:#ffd769;font-family:Georgia,'Times New Roman',serif;font-weight:900;font-size:36px;letter-spacing:1px;text-shadow:0 3px 0 #3b2200,0 0 14px rgba(255,188,42,.78);}
@@ -9086,6 +9087,10 @@ function getImageCategory(item) {
   .new-syair-card.theme-white .white-cover-angka-label{left:70.2%;top:41.2%;width:23.0%;height:6.8%;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(250,244,225,.97));border:2px solid rgba(205,151,38,.76);border-radius:16px;box-shadow:inset 0 0 14px rgba(222,172,58,.12),0 0 10px rgba(255,255,255,.60);}
   .new-syair-card.theme-white .white-cover-bbfs-label{left:40.7%;top:67.2%;width:18.6%;height:4.7%;background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(250,244,225,.96));border-radius:999px;box-shadow:0 0 12px rgba(255,255,255,.92);}
   .new-syair-card.theme-white .white-cover-syair-title{left:40.5%;top:82.4%;width:19.0%;height:4.7%;background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(250,244,225,.96));border-radius:999px;box-shadow:0 0 12px rgba(255,255,255,.92);}
+
+
+  .new-syair-card.downloading .new-date-cover{left:29.2%;top:13.05%;width:41.6%;height:6.45%;background:#000;border-radius:999px;box-shadow:none;z-index:5;}
+  .new-syair-card.downloading .new-date-text{z-index:6;}
 
   @media(max-width:1180px){.syair-new-layout{grid-template-columns:1fr}.syair-new-controls{position:static}.syair-download-btn:not(.mobile){display:none}.syair-download-btn.mobile{display:block}.syair-new-preview-wrap{min-height:520px}.syair-new-preview-stage{min-width:620px}}
 </style>
@@ -9338,13 +9343,14 @@ Untung besar siap berjaya.`]
   window.downloadNewSyairPNG = async function(){
     const card=id('newSyairCard'); if(!card) return;
     const oldTransform=card.style.transform, oldMargin=card.style.marginBottom, oldRadius=card.style.borderRadius, oldShadow=card.style.boxShadow;
-    card.style.transform='none'; card.style.marginBottom='0'; card.style.borderRadius='0'; card.style.boxShadow='none';
+    card.style.transform='none'; card.style.marginBottom='0'; card.style.borderRadius='0'; card.style.boxShadow='none'; card.classList.add('downloading');
     try{
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
       const canvas = await html2canvas(card,{backgroundColor:null,useCORS:true,allowTaint:true,scale:2,width:1254,height:1254,windowWidth:1400,windowHeight:1400});
       const a=document.createElement('a'); a.href=canvas.toDataURL('image/png'); a.download=`syair-${state.template.toLowerCase()}-${state.pasar.toLowerCase()}-${state.shio.toLowerCase()}-${Date.now()}.png`; document.body.appendChild(a); a.click(); a.remove();
       if(window.updateStatus) updateStatus('PNG syair berhasil didownload');
     }catch(e){console.error(e); alert('Gagal download PNG. Coba refresh lalu ulangi.');}
-    finally{card.style.transform=oldTransform;card.style.marginBottom=oldMargin;card.style.borderRadius=oldRadius;card.style.boxShadow=oldShadow;scaleCard();}
+    finally{card.classList.remove('downloading');card.style.transform=oldTransform;card.style.marginBottom=oldMargin;card.style.borderRadius=oldRadius;card.style.boxShadow=oldShadow;scaleCard();}
   }
   window.initSyairGenerator = function(){
     fillSelect(id('newSyairShio'),shioMap); fillSelect(id('newSyairPasaran'),pasarMap);
