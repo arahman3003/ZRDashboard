@@ -9245,11 +9245,11 @@ Kekuatan hati jadi cahaya,
 Shio Harimau membawa damai,
 Untung besar siap berjaya.`]
   };
-  let state = { shio:'NAGA', pasar:'BANGKOK', poemIndex:0, bbfs:[1,2,3,4,5,6], colok:[7,8,9,10], main:[1,2,3,4] };
+  let state = { shio:'NAGA', pasar:'BANGKOK', poemIndex:0, bbfs:[0,1,2,3,4,5], colok:[6,7,8,9], main:[0,1,2,3] };
   function id(x){return document.getElementById(x)}
   function randInt(max){return Math.floor(Math.random()*max)}
   function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=randInt(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
-  function randomNums(count){return shuffle([1,2,3,4,5,6,7,8,9,10]).slice(0,count)}
+  function randomNums(count){return shuffle([0,1,2,3,4,5,6,7,8,9]).slice(0,count)}
   function indoDate(){
     const d = new Date();
     const bulan = ['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
