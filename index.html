@@ -4789,7 +4789,7 @@
     
 
       /* =====================================================
-         SYAIR POLA KHUSUS - TEMPLATE KHUSUS MENGIKUTI GAMBAR
+         SYAIR POLA KHUSUS - POSISI ABSOLUTE SESUAI TEMPLATE
          ===================================================== */
       .syair-card.syair-pattern-card {
         width: 1254px;
@@ -4820,144 +4820,121 @@
       .pattern-top-mask,
       .pattern-top-text,
       .pattern-shio-wrap,
-      .pattern-colok,
-      .pattern-angka-grid,
-      .pattern-bbfs-grid,
+      .pattern-colok-num,
+      .pattern-angka-digit,
+      .pattern-bbfs-digit,
       .pattern-syair-box {
         position: absolute;
         z-index: 4;
       }
 
       .pattern-top-mask {
-        left: 28.9%;
-        top: 10.95%;
-        width: 42.2%;
-        height: 5.2%;
-        border-radius: 28px;
+        left: 349px;
+        top: 124px;
+        width: 556px;
+        height: 57px;
+        border-radius: 999px;
       }
       .syair-pattern-card.template-black .pattern-top-mask {
-        background: linear-gradient(180deg, rgba(10,10,10,0.96), rgba(22,22,22,0.96));
+        background: linear-gradient(180deg, rgba(12,12,12,0.97), rgba(20,20,20,0.97));
       }
       .syair-pattern-card.template-white .pattern-top-mask {
-        background: linear-gradient(180deg, rgba(247,242,232,0.96), rgba(238,230,214,0.96));
+        background: linear-gradient(180deg, rgba(248,243,233,0.97), rgba(240,232,215,0.97));
       }
 
       .pattern-top-text {
-        left: 28.5%;
-        top: 10.9%;
-        width: 43.0%;
-        height: 5.3%;
+        left: 341px;
+        top: 119px;
+        width: 572px;
+        height: 67px;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 0 20px;
+        padding: 0 18px;
         font-family: Georgia, serif !important;
         font-weight: 900;
         font-size: 29px;
-        letter-spacing: 1px;
+        letter-spacing: 0.8px;
         text-transform: uppercase;
         line-height: 1.05;
       }
       .syair-pattern-card.template-black .pattern-top-text {
-        color: #f0c65f;
-        text-shadow: 0 3px 0 #3b2600, 0 0 7px rgba(0,0,0,0.55);
+        color: #efc864;
+        text-shadow: 0 3px 0 #3e2900, 0 0 8px rgba(0,0,0,0.55);
       }
       .syair-pattern-card.template-white .pattern-top-text {
-        color: #b37712;
-        text-shadow: 0 2px 0 rgba(255,255,255,0.7);
+        color: #b57a16;
+        text-shadow: 0 1px 0 rgba(255,255,255,0.85), 0 0 2px rgba(255,255,255,0.45);
       }
 
       .pattern-shio-wrap {
-        left: 38.0%;
-        top: 23.4%;
-        width: 24.0%;
-        height: 24.3%;
+        left: 432px;
+        top: 323px;
+        width: 362px;
+        height: 360px;
         display: flex;
         align-items: center;
         justify-content: center;
       }
       .pattern-shio-img {
-        max-width: 80%;
-        max-height: 80%;
+        max-width: 76%;
+        max-height: 76%;
         object-fit: contain;
         filter: drop-shadow(0 10px 8px rgba(0,0,0,0.45));
       }
 
-      .pattern-colok {
-        left: 5.7%;
-        top: 42.2%;
-        width: 22.8%;
-        height: 25.8%;
-      }
       .pattern-colok-num,
       .pattern-angka-digit,
       .pattern-bbfs-digit {
-        position: absolute;
+        width: 68px;
+        height: 68px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: Impact, "Arial Black", sans-serif !important;
         font-weight: 900;
         line-height: 1;
-        width: 62px;
-        height: 62px;
       }
       .syair-pattern-card.template-black .pattern-colok-num,
       .syair-pattern-card.template-black .pattern-angka-digit,
       .syair-pattern-card.template-black .pattern-bbfs-digit {
-        color: #f5e9b5;
-        text-shadow: 0 3px 0 #4c3000, 0 0 8px rgba(0,0,0,0.55);
+        color: #f7e8af;
+        text-shadow: 0 3px 0 #4b3100, 0 0 8px rgba(0,0,0,0.60);
       }
       .syair-pattern-card.template-white .pattern-colok-num,
       .syair-pattern-card.template-white .pattern-angka-digit,
       .syair-pattern-card.template-white .pattern-bbfs-digit {
-        color: #c08a1b;
-        text-shadow: 0 2px 0 rgba(255,255,255,0.65), 0 0 4px rgba(255,255,255,0.45);
+        color: #c1881d;
+        text-shadow: 0 1px 0 rgba(255,255,255,0.90), 0 0 3px rgba(255,255,255,0.45);
       }
 
       .pattern-colok-num { font-size: 64px; }
-      .pattern-colok-num.c1 { left: 16%; top: 28%; }
-      .pattern-colok-num.c2 { right: 14%; top: 28%; }
-      .pattern-colok-num.c3 { left: 16%; bottom: 19%; }
-      .pattern-colok-num.c4 { right: 14%; bottom: 19%; }
+      .pattern-colok-num.c1 { left: 191px; top: 510px; }
+      .pattern-colok-num.c2 { left: 76px; top: 608px; }
+      .pattern-colok-num.c3 { left: 306px; top: 609px; }
+      .pattern-colok-num.c4 { left: 191px; top: 719px; }
 
-      .pattern-angka-grid {
-        left: 74.0%;
-        top: 43.4%;
-        width: 15.2%;
-        height: 24.2%;
-      }
-      .pattern-angka-digit { font-size: 58px; }
-      .pattern-angka-digit.a1 { left: 17%; top: 26%; }
-      .pattern-angka-digit.a2 { right: 17%; top: 26%; }
-      .pattern-angka-digit.a3 { left: 17%; bottom: 17%; }
-      .pattern-angka-digit.a4 { right: 17%; bottom: 17%; }
+      .pattern-angka-digit { font-size: 60px; }
+      .pattern-angka-digit.a1 { left: 938px; top: 560px; }
+      .pattern-angka-digit.a2 { left: 1053px; top: 560px; }
+      .pattern-angka-digit.a3 { left: 938px; top: 665px; }
+      .pattern-angka-digit.a4 { left: 1053px; top: 665px; }
 
-      .pattern-bbfs-grid {
-        left: 29.9%;
-        top: 66.25%;
-        width: 40.5%;
-        height: 6.8%;
-      }
-      .pattern-bbfs-digit {
-        top: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 52px;
-      }
-      .pattern-bbfs-digit.b1 { left: 8.2%; }
-      .pattern-bbfs-digit.b2 { left: 24.6%; }
-      .pattern-bbfs-digit.b3 { left: 41.0%; }
-      .pattern-bbfs-digit.b4 { left: 57.4%; }
-      .pattern-bbfs-digit.b5 { left: 73.8%; }
-      .pattern-bbfs-digit.b6 { left: 90.2%; }
+      .pattern-bbfs-digit { font-size: 52px; top: 885px; }
+      .pattern-bbfs-digit.b1 { left: 341px; }
+      .pattern-bbfs-digit.b2 { left: 442px; }
+      .pattern-bbfs-digit.b3 { left: 543px; }
+      .pattern-bbfs-digit.b4 { left: 644px; }
+      .pattern-bbfs-digit.b5 { left: 745px; }
+      .pattern-bbfs-digit.b6 { left: 846px; }
 
       .pattern-syair-box {
-        left: 18.4%;
-        top: 80.6%;
-        width: 63.1%;
-        height: 12.2%;
-        padding: 16px 42px 18px;
+        left: 189px;
+        top: 1014px;
+        width: 877px;
+        height: 127px;
+        padding: 10px 42px 12px;
         overflow: hidden;
         display: flex;
         align-items: center;
@@ -4971,12 +4948,12 @@
         font-weight: 900;
       }
       .syair-pattern-card.template-black .pattern-syair-inner {
-        color: #f0d48d;
+        color: #efd08a;
         text-shadow: 0 2px 0 rgba(0,0,0,0.55);
       }
       .syair-pattern-card.template-white .pattern-syair-inner {
-        color: #b37a16;
-        text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+        color: #b27a18;
+        text-shadow: 0 1px 0 rgba(255,255,255,0.85);
       }
 
 
