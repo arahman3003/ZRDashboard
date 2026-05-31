@@ -4786,6 +4786,246 @@
         }
       }
 
+    
+
+      /* =====================================================
+         SYAIR POLA BARU - RED GOLD RAPI SEPERTI CONTOH
+         ===================================================== */
+      .syair-card.syair-pattern-card {
+        width: 1080px;
+        height: 1080px;
+        border-radius: 0;
+        overflow: hidden;
+        position: relative;
+        background:
+          radial-gradient(circle at center, rgba(255, 194, 72, 0.10), transparent 32%),
+          repeating-radial-gradient(ellipse at center, rgba(255, 214, 84, 0.08) 0 2px, transparent 3px 18px),
+          linear-gradient(135deg, #520707 0%, #7b0808 44%, #3b0404 100%);
+        border: 8px solid #d69b16;
+        box-shadow: inset 0 0 0 4px #7b2000, inset 0 0 60px rgba(0,0,0,0.45);
+      }
+
+      .syair-pattern-card::before,
+      .syair-pattern-card::after {
+        content: "龍";
+        position: absolute;
+        top: 56px;
+        font-family: Georgia, serif !important;
+        font-size: 180px;
+        font-weight: 900;
+        line-height: 1;
+        color: #c98210;
+        text-shadow: 0 3px 0 #5a1900, 0 0 18px rgba(255, 198, 62, 0.70);
+        opacity: 0.95;
+        z-index: 1;
+      }
+
+      .syair-pattern-card::before { left: 72px; }
+      .syair-pattern-card::after { right: 72px; transform: scaleX(-1); }
+
+      .syair-pattern-card * {
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+
+      .pattern-corner {
+        position: absolute;
+        width: 142px;
+        height: 142px;
+        border-color: #f2bd28;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .pattern-corner.tl { left: 18px; top: 18px; border-left: 5px solid; border-top: 5px solid; }
+      .pattern-corner.tr { right: 18px; top: 18px; border-right: 5px solid; border-top: 5px solid; }
+      .pattern-corner.bl { left: 18px; bottom: 18px; border-left: 5px solid; border-bottom: 5px solid; }
+      .pattern-corner.br { right: 18px; bottom: 18px; border-right: 5px solid; border-bottom: 5px solid; }
+
+      .pattern-brand {
+        position: absolute;
+        top: 45px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 4;
+        color: #fff;
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        text-shadow: 0 4px 0 rgba(0,0,0,0.55);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .pattern-brand-badge {
+        width: 58px;
+        height: 58px;
+        border-radius: 13px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #ffdb59, #b70d0d);
+        border: 4px solid #f6c339;
+        color: #fff;
+        font-size: 25px;
+      }
+
+      .pattern-date {
+        position: absolute;
+        left: 50%;
+        top: 145px;
+        transform: translateX(-50%);
+        width: 350px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, #b40b0b, #690505);
+        border: 4px solid #e3b325;
+        box-shadow: inset 0 0 0 2px #601100, 0 7px 0 rgba(0,0,0,0.26);
+        border-radius: 8px;
+        color: #ffe474;
+        font-family: Georgia, serif !important;
+        font-size: 31px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        z-index: 4;
+      }
+
+      .pattern-market {
+        position: absolute;
+        left: 50%;
+        top: 242px;
+        transform: translateX(-50%);
+        z-index: 4;
+        color: #fff5b8;
+        font-family: Georgia, serif !important;
+        font-size: 45px;
+        font-weight: 900;
+        text-transform: uppercase;
+        text-shadow: 0 4px 0 rgba(0,0,0,0.55), 0 0 10px rgba(255,221,92,0.55);
+      }
+
+      .pattern-panel {
+        position: absolute;
+        z-index: 5;
+        background:
+          repeating-radial-gradient(ellipse at center, rgba(255, 211, 64, 0.12) 0 2px, transparent 3px 15px),
+          linear-gradient(180deg, rgba(143, 9, 9, 0.98), rgba(83, 4, 4, 0.98));
+        border: 4px solid #d7a51c;
+        box-shadow: inset 0 0 0 2px #4f0c00, 0 10px 0 rgba(0,0,0,0.22);
+      }
+      .pattern-panel-title {
+        position: absolute;
+        left: 50%;
+        top: -36px;
+        transform: translateX(-50%);
+        min-width: 205px;
+        height: 45px;
+        padding: 6px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 4px solid #d7a51c;
+        background: linear-gradient(180deg, #a20b0b, #5b0505);
+        color: #ffe16a;
+        font-family: Georgia, serif !important;
+        font-weight: 900;
+        font-size: 25px;
+        letter-spacing: 1px;
+        white-space: nowrap;
+      }
+
+      .pattern-colok { left: 78px; top: 455px; width: 285px; height: 245px; }
+      .pattern-compass {
+        position: absolute;
+        left: 50%;
+        top: 53%;
+        width: 118px;
+        height: 118px;
+        transform: translate(-50%, -50%) rotate(45deg);
+        background: linear-gradient(135deg, #ffef9a, #b56a08 52%, #fff0a2);
+        clip-path: polygon(50% 0, 63% 38%, 100% 50%, 63% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+        filter: drop-shadow(0 5px 4px rgba(0,0,0,0.45));
+      }
+      .pattern-colok-num { position: absolute; color: #fff; font-size: 58px; font-weight: 900; line-height: 1; text-shadow: 0 5px 0 #4c0000, 0 0 8px rgba(255,255,255,0.35); }
+      .pattern-colok-num.c1 { left: 50px; top: 55px; }
+      .pattern-colok-num.c2 { right: 50px; top: 55px; }
+      .pattern-colok-num.c3 { left: 50px; bottom: 38px; }
+      .pattern-colok-num.c4 { right: 50px; bottom: 38px; }
+
+      .pattern-center {
+        position: absolute;
+        left: 50%;
+        top: 505px;
+        transform: translate(-50%, -50%);
+        width: 305px;
+        height: 305px;
+        border-radius: 50%;
+        border: 12px solid #dba21b;
+        background: radial-gradient(circle, #720808 0%, #3b0505 72%);
+        box-shadow: inset 0 0 0 8px #350300, 0 0 0 8px #6b1a00, 0 14px 0 rgba(0,0,0,0.25);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .pattern-shio-img { width: 74%; height: 74%; object-fit: contain; filter: drop-shadow(0 10px 5px rgba(0,0,0,0.55)); }
+      .pattern-shio-ribbon {
+        position: absolute;
+        left: 50%;
+        top: 648px;
+        transform: translateX(-50%);
+        width: 345px;
+        height: 72px;
+        border-radius: 6px;
+        background: linear-gradient(180deg, #b50b0b, #640505);
+        border: 4px solid #c48c0c;
+        color: #ffe266;
+        font-family: Georgia, serif !important;
+        font-size: 35px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 6;
+        box-shadow: 0 7px 0 rgba(0,0,0,0.25);
+      }
+
+      .pattern-bbfs { right: 78px; top: 455px; width: 285px; height: 150px; display: flex; align-items: center; justify-content: center; }
+      .pattern-bbfs-value { color: #fff; font-size: 46px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 5px 0 #4c0000, 0 0 8px rgba(255,255,255,0.35); }
+      .pattern-angka { right: 78px; top: 710px; width: 285px; height: 115px; display: flex; align-items: center; justify-content: center; }
+      .pattern-angka-value { color: #fff; font-size: 31px; font-weight: 900; letter-spacing: 5px; text-shadow: 0 4px 0 #4c0000; }
+
+      .pattern-syair-box {
+        position: absolute;
+        left: 50%;
+        bottom: 76px;
+        transform: translateX(-50%);
+        width: 500px;
+        height: 135px;
+        padding: 26px 46px 20px;
+        z-index: 5;
+        border: 4px solid #d7a51c;
+        background:
+          repeating-radial-gradient(ellipse at center, rgba(255, 211, 64, 0.12) 0 2px, transparent 3px 15px),
+          linear-gradient(180deg, rgba(143, 9, 9, 0.98), rgba(83, 4, 4, 0.98));
+        color: #fff;
+        font-size: 22px;
+        line-height: 1.28;
+        font-weight: 900;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        text-shadow: 0 3px 0 rgba(0,0,0,0.55);
+      }
+      .pattern-syair-inner { width: 100%; }
+      .pattern-cloud { position: absolute; color: #dba21b; font-size: 100px; z-index: 3; opacity: 0.9; text-shadow: 0 4px 0 #5a1900; }
+      .pattern-cloud.left { left: 80px; bottom: 145px; }
+      .pattern-cloud.right { right: 88px; bottom: 145px; }
+
     </style>
   </head>
 
@@ -7543,7 +7783,7 @@ function getImageCategory(item) {
         return {
           bb: [randTwoDigit(), randTwoDigit(), randTwoDigit(), randTwoDigit(), randTwoDigit()],
           arah: [randDigit(), randDigit(), randDigit(), randDigit()],
-          colok: [randDigit(), randDigit()],
+          colok: [randDigit(), randDigit(), randDigit(), randDigit()],
           jaga: [randDigit(), randDigit()],
           ekor: [randDigit(), randDigit()],
           kepala: [randDigit(), randDigit()],
@@ -7687,87 +7927,55 @@ function getImageCategory(item) {
         }
 
         const marketKey = getElValue("syairMarketSelect", "BANGKOK");
-        const shio = getElValue("syairShioSelect", "NAGA");
+        const shio = getElValue("syairShioSelect", "KUDA");
         const dateValue = getElValue("syairDateInput", getTodayInputValue());
         const rawSyairText = getElValue("syairTextArea", "");
         const syairData = rawSyairText.trim()
           ? formatSyairText(rawSyairText)
-          : { html: "Tulis syair di sini...", lineCount: 1 };
+          : { html: "", lineCount: 1 };
         const syairText = syairData.html;
-        const syairLinesClass = `lines-${Math.min(Math.max(syairData.lineCount || 1, 1), 8)}`;
         const dateInfo = formatSyairDateParts(dateValue);
         const cfg = syairMarketConfig[marketKey] || syairMarketConfig.BANGKOK;
+        const marketName = String(cfg.label || marketKey).replace(/^SYAIR\s+/i, "");
         const shioUrl = shioImageMap[shio] || "";
         const n = currentSyairNumbers;
+        const colok = (n.colok || []).slice(0, 4);
+        const bbfs = (n.bbfs || []).slice(0, 7).join("");
+        const angkaMain = [...(n.angkaMain || []), ...(n.jitu || [])].slice(0, 5).join(" - ");
 
         preview.innerHTML = `
           <div class="syair-preview-stage" id="syairPreviewStage">
-          <div class="syair-card" id="syairCardCapture">
-            <img class="syair-bg" src="${escapeAttribute(SYAIR_TEMPLATE_URL)}" crossorigin="anonymous" alt="Template Syair">
-
-            <div class="syair-date-box">
-              <span class="day-name">${escapeHtml(dateInfo.weekday)}</span>
-              <span class="full-date">${escapeHtml(dateInfo.longDate)}</span>
+          <div class="syair-card syair-pattern-card" id="syairCardCapture">
+            <div class="pattern-corner tl"></div>
+            <div class="pattern-corner tr"></div>
+            <div class="pattern-corner bl"></div>
+            <div class="pattern-corner br"></div>
+            <div class="pattern-brand"><span class="pattern-brand-badge">🎰</span><span>TVTOTO</span></div>
+            <div class="pattern-date">${escapeHtml(dateInfo.fullUpper)}</div>
+            <div class="pattern-market">✥ ${escapeHtml(marketName)} ✥</div>
+            <div class="pattern-panel pattern-colok">
+              <div class="pattern-panel-title">COLOK BEBAS</div>
+              <div class="pattern-compass"></div>
+              <div class="pattern-colok-num c1">${escapeHtml(colok[0] || "")}</div>
+              <div class="pattern-colok-num c2">${escapeHtml(colok[1] || "")}</div>
+              <div class="pattern-colok-num c3">${escapeHtml(colok[2] || "")}</div>
+              <div class="pattern-colok-num c4">${escapeHtml(colok[3] || "")}</div>
             </div>
-
-            <div class="syair-shio-box">
-              ${shioUrl ? `<img class="syair-shio-img" src="${escapeAttribute(shioUrl)}" crossorigin="anonymous" alt="${escapeAttribute(shio)}">` : ""}
+            <div class="pattern-center">
+              ${shioUrl ? `<img class="pattern-shio-img" src="${escapeAttribute(shioUrl)}" crossorigin="anonymous" alt="${escapeAttribute(shio)}">` : ""}
             </div>
-
-            <div class="syair-poem-box ${syairLinesClass}"><div class="syair-poem-inner">${syairText}</div></div>
-
-            <div class="syair-market-logo">
-              <img src="${escapeAttribute(cfg.logo)}" crossorigin="anonymous" alt="${escapeAttribute(cfg.label)}">
+            <div class="pattern-shio-ribbon">SHIO ${escapeHtml(shio)}</div>
+            <div class="pattern-panel pattern-bbfs">
+              <div class="pattern-panel-title">BBFS</div>
+              <div class="pattern-bbfs-value">${escapeHtml(bbfs)}</div>
             </div>
-
-            <div class="syair-label-mini syair-label-bb">BB</div>
-            <div class="syair-label-mini syair-label-colok">COLOK</div>
-            <div class="syair-label-mini syair-label-jaga">JAGA</div>
-            <div class="syair-label-mini syair-label-ekor">EKOR</div>
-            <div class="syair-label-mini syair-label-kepala">KEPALA</div>
-            <div class="syair-label-mini syair-label-bbfs">BBFS</div>
-            <div class="syair-label-mini syair-label-shio">SHIO</div>
-            <div class="syair-angka-main-label">ANGKA<br>MAIN</div>
-
-            <div class="num-grid syair-bb-col">
-              ${buildNumCells(n.bb, "bb-cell")}
+            <div class="pattern-panel pattern-angka">
+              <div class="pattern-panel-title">ANGKA MAIN</div>
+              <div class="pattern-angka-value">${escapeHtml(angkaMain)}</div>
             </div>
-
-            <div class="syair-arah-group">
-              <div class="syair-arah-num arah-top">${escapeHtml(n.arah[0])}</div>
-              <div class="syair-arah-num arah-left">${escapeHtml(n.arah[1])}</div>
-              <div class="syair-arah-num arah-right">${escapeHtml(n.arah[2])}</div>
-              <div class="syair-arah-num arah-bottom">${escapeHtml(n.arah[3])}</div>
-              <svg class="syair-arah-star" viewBox="0 0 100 100" aria-hidden="true">
-                <polygon points="50,6 58,42 94,50 58,58 50,94 42,58 6,50 42,42" fill="#111"></polygon>
-                <polygon points="50,19 55,45 81,50 55,55 50,81 45,55 19,50 45,45" fill="#f4f4f4"></polygon>
-                <circle cx="50" cy="50" r="4" fill="#111"></circle>
-              </svg>
-            </div>
-
-            <div class="num-grid syair-colok-grid">
-              ${buildNumCells(n.colok, "colok-cell")}
-            </div>
-
-            <div class="num-grid syair-jaga-grid">
-              ${buildNumCells(n.jaga, "jaga-cell")}
-            </div>
-
-            <div class="num-grid syair-ekor-grid">
-              ${buildNumCells(n.ekor, "ekor-cell")}
-            </div>
-
-            <div class="num-grid syair-kepala-grid">
-              ${buildNumCells(n.kepala, "kepala-cell")}
-            </div>
-
-            <div class="num-grid syair-bbfs-row">
-              ${buildNumCells(n.bbfs, "bbfs-cell")}
-            </div>
-
-            <div class="num-grid syair-main-l-grid">
-              ${buildNumCells([...n.angkaMain, ...n.jitu], "mainl-cell")}
-            </div>
+            <div class="pattern-syair-box"><div class="pattern-syair-inner">${syairText}</div></div>
+            <div class="pattern-cloud left">☁</div>
+            <div class="pattern-cloud right">☁</div>
           </div>
           </div>
         `;
@@ -7793,7 +8001,7 @@ function getImageCategory(item) {
 
         if (dateEl) dateEl.value = getTodayInputValue();
         if (marketEl) marketEl.value = "BANGKOK";
-        if (shioEl) shioEl.value = "NAGA";
+        if (shioEl) shioEl.value = "KUDA";
         if (textEl) textEl.value = "";
 
         currentSyairNumbers = generateSyairNumbers();
@@ -7812,8 +8020,8 @@ function getImageCategory(item) {
         const frameWidth = Math.max(320, frame.clientWidth || frameRect.width || 1200);
 
         // Ukuran asli syair tetap 1500x1000 agar export/copy tidak berubah.
-        const originalWidth = 1500;
-        const originalHeight = 1000;
+        const originalWidth = 1080;
+        const originalHeight = 1080;
 
         // Preview selalu mengikuti lebar panel, jadi saat zoom tidak keluar tabel.
         const sideGap = frameWidth < 800 ? 18 : 44;
