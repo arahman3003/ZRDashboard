@@ -2414,17 +2414,18 @@
       .sticky-note-modal-content {
         position: relative;
         z-index: 2;
-        width: min(92vw, 560px);
+        width: min(94vw, 720px);
         max-height: 92vh;
         overflow-y: auto;
-        margin: 5vh auto;
-        padding: 20px;
-        border-radius: 26px;
+        margin: 7vh auto;
+        padding: 22px;
+        border-radius: 24px;
         background:
-          radial-gradient(circle at top left, rgba(250,204,21,0.14), transparent 30%),
+          radial-gradient(circle at top left, rgba(59,130,246,0.16), transparent 32%),
+          radial-gradient(circle at bottom right, rgba(139,92,246,0.16), transparent 30%),
           linear-gradient(180deg, rgba(15,23,42,0.98), rgba(17,24,39,0.98));
-        border: 1px solid rgba(255,255,255,0.12);
-        box-shadow: 0 28px 80px rgba(0,0,0,0.56);
+        border: 1px solid rgba(255,255,255,0.14);
+        box-shadow: 0 26px 80px rgba(0,0,0,0.58);
       }
 
       .sticky-note-modal-header {
@@ -2458,6 +2459,81 @@
         font-size: 26px;
         line-height: 1;
         cursor: pointer;
+        transition: 0.22s ease;
+      }
+
+      .sticky-note-modal-close:hover {
+        background: rgba(255,255,255,0.16);
+        transform: rotate(90deg);
+      }
+
+      .sticky-note-modal-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 230px;
+        gap: 18px;
+        align-items: start;
+      }
+
+      .sticky-note-modal-preview-wrap {
+        min-height: 282px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.10);
+        background: rgba(255,255,255,0.04);
+        padding: 14px;
+      }
+
+      .sticky-note-modal-preview-title {
+        display: block;
+        margin-bottom: 10px;
+        color: #dbeafe;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+      }
+
+      .sticky-note-live-preview {
+        min-height: 230px;
+        border-radius: 18px;
+        padding: 16px;
+        color: #1f2937;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+        overflow: hidden;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      .sticky-note-live-preview h4 {
+        margin: 0 0 10px;
+        color: #111827;
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .sticky-note-live-preview p {
+        margin: 0;
+        color: rgba(17,24,39,0.82);
+        font-size: 14px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+      }
+
+      .sticky-note-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      @media (max-width: 760px) {
+        .sticky-note-modal-grid {
+          grid-template-columns: 1fr;
+        }
+        .sticky-note-modal-content {
+          margin: 2vh auto;
+          max-height: 96vh;
+        }
       }
 
       @media (max-width: 1180px) {
@@ -5643,26 +5719,37 @@
                   <button class="sticky-note-modal-close" type="button" onclick="closeStickyNoteModal()">×</button>
                 </div>
 
-                <div class="notepad-form-stack">
-                  <div>
-                    <label class="notepad-label" for="noteTitleInput">Judul Catatan</label>
-                    <input type="text" id="noteTitleInput" placeholder="Contoh: Catatan penting">
+                <div class="sticky-note-modal-grid">
+                  <div class="notepad-form-stack">
+                    <div>
+                      <label class="notepad-label" for="noteTitleInput">Judul Catatan</label>
+                      <input type="text" id="noteTitleInput" placeholder="Contoh: Catatan penting" oninput="updateStickyNotePreview()">
+                    </div>
+
+                    <div>
+                      <label class="notepad-label" for="noteTextInput">Isi Catatan</label>
+                      <textarea id="noteTextInput" class="notepad-textarea" placeholder="Tulis catatan bos di sini..." oninput="updateStickyNotePreview()"></textarea>
+                    </div>
+
+                    <div>
+                      <label class="notepad-label">Warna Sticky Note</label>
+                      <div id="noteColorPicker" class="notepad-color-row"></div>
+                    </div>
                   </div>
 
-                  <div>
-                    <label class="notepad-label" for="noteTextInput">Isi Catatan</label>
-                    <textarea id="noteTextInput" class="notepad-textarea" placeholder="Tulis catatan bos di sini..."></textarea>
+                  <div class="sticky-note-modal-preview-wrap">
+                    <span class="sticky-note-modal-preview-title">Preview</span>
+                    <div id="stickyNoteLivePreview" class="sticky-note-live-preview">
+                      <h4>Catatan Baru</h4>
+                      <p>Preview catatan akan muncul di sini.</p>
+                    </div>
                   </div>
+                </div>
 
-                  <div>
-                    <label class="notepad-label">Warna Sticky Note</label>
-                    <div id="noteColorPicker" class="notepad-color-row"></div>
-                  </div>
-
-                  <div class="notepad-actions">
-                    <button class="btn copy-live-btn" type="button" onclick="addStickyNote()">Tambah</button>
-                    <button class="btn secondary" type="button" onclick="clearStickyNoteInputs()">Bersihkan</button>
-                  </div>
+                <div class="sticky-note-modal-actions">
+                  <button class="btn secondary" type="button" onclick="closeStickyNoteModal()">Batal</button>
+                  <button class="btn secondary" type="button" onclick="clearStickyNoteInputs()">Bersihkan</button>
+                  <button class="btn copy-live-btn" type="button" onclick="addStickyNote()">Simpan Catatan</button>
                 </div>
               </div>
             </div>
@@ -9467,9 +9554,21 @@ function getImageCategory(item) {
         `).join("");
       }
 
+      function updateStickyNotePreview() {
+        const preview = document.getElementById("stickyNoteLivePreview");
+        if (!preview) return;
+        const titleEl = document.getElementById("noteTitleInput");
+        const textEl = document.getElementById("noteTextInput");
+        const title = String(titleEl ? titleEl.value : "").trim() || "Catatan Baru";
+        const text = String(textEl ? textEl.value : "").trim() || "Preview catatan akan muncul di sini.";
+        preview.style.background = selectedStickyNoteColor || STICKY_NOTE_COLORS[0].value;
+        preview.innerHTML = `<h4>${escapeNoteHtml(title)}</h4><p>${escapeNoteHtml(text)}</p>`;
+      }
+
       function selectStickyNoteColor(colorValue) {
         selectedStickyNoteColor = colorValue || STICKY_NOTE_COLORS[0].value;
         renderStickyNoteColorPicker();
+        updateStickyNotePreview();
       }
 
 
@@ -9478,6 +9577,7 @@ function getImageCategory(item) {
         if (!modal) return;
         modal.classList.add("show");
         modal.setAttribute("aria-hidden", "false");
+        updateStickyNotePreview();
         setTimeout(() => {
           const titleInput = document.getElementById("noteTitleInput");
           if (titleInput) titleInput.focus();
@@ -9568,6 +9668,7 @@ function getImageCategory(item) {
           selectedStickyNoteColor = STICKY_NOTE_COLORS[0].value;
           renderStickyNoteColorPicker();
         }
+        updateStickyNotePreview();
       }
 
       function updateStickyNoteField(noteId, field, value) {
