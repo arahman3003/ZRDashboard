@@ -2393,31 +2393,39 @@
       }
 
 
+      body.sticky-note-modal-open {
+        overflow: hidden;
+      }
+
       .sticky-note-modal {
         position: fixed;
         inset: 0;
-        z-index: 10050;
+        z-index: 2147483000;
         display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
       }
 
       .sticky-note-modal.show {
-        display: block;
+        display: flex;
       }
 
       .sticky-note-modal-backdrop {
-        position: absolute;
+        position: fixed;
         inset: 0;
-        background: rgba(2,6,23,0.78);
-        backdrop-filter: blur(7px);
+        background: rgba(2,6,23,0.82);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
       }
 
       .sticky-note-modal-content {
         position: relative;
         z-index: 2;
         width: min(94vw, 720px);
-        max-height: 92vh;
+        max-height: min(92vh, 680px);
         overflow-y: auto;
-        margin: 7vh auto;
+        margin: 0;
         padding: 22px;
         border-radius: 24px;
         background:
@@ -2530,8 +2538,12 @@
         .sticky-note-modal-grid {
           grid-template-columns: 1fr;
         }
+        .sticky-note-modal {
+          align-items: flex-start;
+          padding: 14px;
+        }
         .sticky-note-modal-content {
-          margin: 2vh auto;
+          margin: 0 auto;
           max-height: 96vh;
         }
       }
@@ -9577,6 +9589,7 @@ function getImageCategory(item) {
         if (!modal) return;
         modal.classList.add("show");
         modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("sticky-note-modal-open");
         updateStickyNotePreview();
         setTimeout(() => {
           const titleInput = document.getElementById("noteTitleInput");
@@ -9589,6 +9602,7 @@ function getImageCategory(item) {
         if (!modal) return;
         modal.classList.remove("show");
         modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("sticky-note-modal-open");
       }
 
       function renderStickyNotes() {
