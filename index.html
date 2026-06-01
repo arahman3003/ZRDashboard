@@ -2135,6 +2135,256 @@
         }
       }
 
+
+
+      /* =========================
+         NOTEPAD / STICKY NOTES
+      ========================= */
+      .notepad-panel {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .notepad-panel::before {
+        content: "";
+        position: absolute;
+        inset: -120px -120px auto auto;
+        width: 420px;
+        height: 420px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(250,204,21,0.12), transparent 62%);
+        pointer-events: none;
+      }
+
+      .notepad-panel > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .notepad-layout {
+        display: grid;
+        grid-template-columns: 330px 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .notepad-create-card,
+      .notepad-list-wrap {
+        background: linear-gradient(180deg, rgba(15,23,42,0.80), rgba(17,24,39,0.64));
+        border: 1px solid rgba(255,255,255,0.09);
+        border-radius: 22px;
+        padding: 16px;
+        box-shadow: 0 18px 42px rgba(0,0,0,0.20);
+      }
+
+      .notepad-create-card {
+        position: sticky;
+        top: 18px;
+      }
+
+      .notepad-form-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+      }
+
+      .notepad-label {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 12px;
+        font-weight: 900;
+        color: #dbeafe;
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+      }
+
+      .notepad-textarea {
+        min-height: 170px;
+        line-height: 1.55;
+        font-weight: 700;
+      }
+
+      .notepad-color-row {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+      }
+
+      .notepad-color-btn {
+        width: 100%;
+        height: 34px;
+        border-radius: 12px;
+        border: 2px solid rgba(255,255,255,0.16);
+        cursor: pointer;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 8px 18px rgba(0,0,0,0.15);
+        transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      }
+
+      .notepad-color-btn:hover,
+      .notepad-color-btn.active {
+        transform: translateY(-2px);
+        border-color: rgba(255,255,255,0.86);
+        box-shadow: 0 0 0 3px rgba(255,255,255,0.08), 0 12px 24px rgba(0,0,0,0.22);
+      }
+
+      .notepad-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .notepad-save-info {
+        color: #cbd5e1;
+        font-size: 12px;
+        line-height: 1.6;
+        background: rgba(255,255,255,0.045);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 15px;
+        padding: 11px 12px;
+      }
+
+      .notepad-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+
+      .notepad-count-pill {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(34,211,238,0.12);
+        border: 1px solid rgba(34,211,238,0.22);
+        color: #a5f3fc;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .notepad-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 14px;
+      }
+
+      .sticky-note-card {
+        position: relative;
+        min-height: 240px;
+        border-radius: 22px;
+        padding: 14px;
+        color: #172033;
+        box-shadow: 0 16px 34px rgba(0,0,0,0.25);
+        border: 1px solid rgba(255,255,255,0.28);
+        overflow: hidden;
+      }
+
+      .sticky-note-card::before {
+        content: "";
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        top: 0;
+        height: 9px;
+        border-radius: 0 0 999px 999px;
+        background: rgba(255,255,255,0.34);
+      }
+
+      .sticky-note-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .sticky-note-title {
+        flex: 1;
+        border: none !important;
+        background: rgba(255,255,255,0.34) !important;
+        color: #111827 !important;
+        font-weight: 900;
+        font-size: 15px !important;
+        padding: 10px 12px !important;
+        border-radius: 13px !important;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+      }
+
+      .sticky-note-delete {
+        width: 38px;
+        height: 38px;
+        border-radius: 13px;
+        border: none;
+        background: rgba(15,23,42,0.16);
+        color: #111827;
+        font-size: 18px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .sticky-note-text {
+        width: 100%;
+        min-height: 132px;
+        resize: vertical;
+        border: none !important;
+        background: rgba(255,255,255,0.24) !important;
+        color: #111827 !important;
+        border-radius: 14px !important;
+        padding: 12px !important;
+        font-size: 15px !important;
+        line-height: 1.55;
+        font-weight: 700;
+      }
+
+      .sticky-note-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        color: rgba(17,24,39,0.76);
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .sticky-note-colors {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .sticky-note-colors .mini-color {
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        border: 2px solid rgba(255,255,255,0.72);
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.14);
+      }
+
+      .notepad-empty {
+        min-height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #94a3b8;
+        border: 1px dashed rgba(148,163,184,0.22);
+        border-radius: 20px;
+        padding: 24px;
+        background: rgba(255,255,255,0.035);
+      }
+
+      @media (max-width: 1180px) {
+        .notepad-layout {
+          grid-template-columns: 1fr;
+        }
+        .notepad-create-card {
+          position: static;
+        }
+      }
+
+
       /* =========================
          IMAGE EDIT MODAL CUSTOM
       ========================= */
@@ -4829,6 +5079,7 @@
 
         <div class="nav">
           <button class="nav-btn active" data-target="dashboardSection">DASHBOARD</button>
+          <button class="nav-btn" data-target="notepadSection">NOTEPAD</button>
           <button class="nav-btn" data-target="pkcsSection">CARI PK APA?</button>
           <button class="nav-btn" data-target="ewalletSection">DATA REK</button>
           <button class="nav-btn" data-target="prediksiSection">PREDIKSI</button>
@@ -5265,6 +5516,65 @@
           </div>
         </section>
         
+
+        <!-- ===================================================== -->
+        <!-- ======================= NOTEPAD ===================== -->
+        <!-- ===================================================== -->
+        <section id="notepadSection" class="section">
+          <div class="panel notepad-panel">
+            <div class="panel-header">
+              <div>
+                <h3>NOTEPAD</h3>
+                <p class="panel-sub">Sticky note pribadi. Semua catatan tersimpan otomatis di browser dan tidak hilang saat halaman direfresh.</p>
+              </div>
+              <div class="notepad-count-pill" id="notepadCountPill">0 Catatan</div>
+            </div>
+
+            <div class="notepad-layout">
+              <div class="notepad-create-card">
+                <div class="notepad-form-stack">
+                  <div>
+                    <label class="notepad-label" for="noteTitleInput">Judul Catatan</label>
+                    <input type="text" id="noteTitleInput" placeholder="Contoh: Catatan penting">
+                  </div>
+
+                  <div>
+                    <label class="notepad-label" for="noteTextInput">Isi Catatan</label>
+                    <textarea id="noteTextInput" class="notepad-textarea" placeholder="Tulis catatan bos di sini..."></textarea>
+                  </div>
+
+                  <div>
+                    <label class="notepad-label">Warna Sticky Note</label>
+                    <div id="noteColorPicker" class="notepad-color-row"></div>
+                  </div>
+
+                  <div class="notepad-actions">
+                    <button class="btn copy-live-btn" type="button" onclick="addStickyNote()">Tambah</button>
+                    <button class="btn secondary" type="button" onclick="clearStickyNoteInputs()">Bersihkan</button>
+                  </div>
+
+                  <button class="btn secondary" type="button" onclick="deleteAllStickyNotes()">Hapus Semua</button>
+
+                  <div class="notepad-save-info">
+                    <strong>Auto Save:</strong> setiap perubahan di kartu catatan langsung tersimpan otomatis di localStorage browser.
+                  </div>
+                </div>
+              </div>
+
+              <div class="notepad-list-wrap">
+                <div class="notepad-toolbar">
+                  <div>
+                    <strong>Daftar Sticky Note</strong>
+                    <div class="panel-sub" style="margin:6px 0 0;">Edit langsung pada kartu catatan. Tidak perlu tombol simpan.</div>
+                  </div>
+                  <button class="btn secondary" type="button" onclick="exportStickyNotesBackup()">Backup JSON</button>
+                </div>
+                <div id="stickyNotesGrid" class="notepad-grid"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- ===================================================== -->
         <!-- ==================== IMAGE MANAGER PRO ============== -->
         <!-- ===================================================== -->
@@ -8992,11 +9302,233 @@ function getImageCategory(item) {
         }
       });
 
+
+
+      /* =========================
+         NOTEPAD / STICKY NOTES
+      ========================= */
+      const STICKY_NOTES_STORAGE_KEY = "dashboardStickyNotesV1";
+      const STICKY_NOTE_COLORS = [
+        { name: "Kuning", value: "#fde68a" },
+        { name: "Hijau", value: "#bbf7d0" },
+        { name: "Biru", value: "#bfdbfe" },
+        { name: "Ungu", value: "#ddd6fe" },
+        { name: "Pink", value: "#fbcfe8" },
+        { name: "Putih", value: "#f8fafc" },
+        { name: "Orange", value: "#fed7aa" },
+        { name: "Merah", value: "#fecaca" },
+        { name: "Tosca", value: "#ccfbf1" },
+        { name: "Abu", value: "#e5e7eb" },
+        { name: "Emas", value: "#facc15" },
+        { name: "Gelap", value: "#cbd5e1" }
+      ];
+      let selectedStickyNoteColor = STICKY_NOTE_COLORS[0].value;
+
+      function stickyNoteNowLabel() {
+        const d = new Date();
+        return d.toLocaleString("id-ID", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      }
+
+      function escapeNoteHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function getStickyNotes() {
+        try {
+          const raw = localStorage.getItem(STICKY_NOTES_STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (err) {
+          console.error("Gagal membaca sticky notes", err);
+          return [];
+        }
+      }
+
+      function saveStickyNotes(notes) {
+        localStorage.setItem(STICKY_NOTES_STORAGE_KEY, JSON.stringify(notes || []));
+      }
+
+      function renderStickyNoteColorPicker() {
+        const picker = document.getElementById("noteColorPicker");
+        if (!picker) return;
+        picker.innerHTML = STICKY_NOTE_COLORS.map(color => `
+          <button
+            type="button"
+            class="notepad-color-btn ${color.value === selectedStickyNoteColor ? "active" : ""}"
+            title="${color.name}"
+            style="background:${color.value}"
+            onclick="selectStickyNoteColor('${color.value}')">
+          </button>
+        `).join("");
+      }
+
+      function selectStickyNoteColor(colorValue) {
+        selectedStickyNoteColor = colorValue || STICKY_NOTE_COLORS[0].value;
+        renderStickyNoteColorPicker();
+      }
+
+      function renderStickyNotes() {
+        const grid = document.getElementById("stickyNotesGrid");
+        const count = document.getElementById("notepadCountPill");
+        if (!grid) return;
+
+        const notes = getStickyNotes();
+        if (count) count.textContent = `${notes.length} Catatan`;
+
+        if (!notes.length) {
+          grid.innerHTML = '<div class="notepad-empty">Belum ada sticky note. Buat catatan pertama dari form di sebelah kiri.</div>';
+          return;
+        }
+
+        grid.innerHTML = notes.map(note => {
+          const id = escapeNoteHtml(note.id);
+          const color = escapeNoteHtml(note.color || STICKY_NOTE_COLORS[0].value);
+          const title = escapeNoteHtml(note.title || "Catatan Baru");
+          const text = escapeNoteHtml(note.text || "");
+          const updated = escapeNoteHtml(note.updatedAt || note.createdAt || "Auto save");
+          const miniColors = STICKY_NOTE_COLORS.map(c => `
+            <button
+              type="button"
+              class="mini-color"
+              title="${c.name}"
+              style="background:${c.value}"
+              onclick="changeStickyNoteColor('${id}','${c.value}')">
+            </button>
+          `).join("");
+
+          return `
+            <article class="sticky-note-card" style="background:${color}" data-note-id="${id}">
+              <div class="sticky-note-top">
+                <input class="sticky-note-title" type="text" value="${title}" data-note-field="title" data-note-id="${id}" placeholder="Judul catatan">
+                <button class="sticky-note-delete" type="button" onclick="deleteStickyNote('${id}')">×</button>
+              </div>
+              <textarea class="sticky-note-text" data-note-field="text" data-note-id="${id}" placeholder="Isi catatan...">${text}</textarea>
+              <div class="sticky-note-colors">${miniColors}</div>
+              <div class="sticky-note-meta">
+                <span>Tersimpan otomatis</span>
+                <span>${updated}</span>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      function addStickyNote() {
+        const titleEl = document.getElementById("noteTitleInput");
+        const textEl = document.getElementById("noteTextInput");
+        const title = String(titleEl ? titleEl.value : "").trim();
+        const text = String(textEl ? textEl.value : "").trim();
+
+        const notes = getStickyNotes();
+        notes.unshift({
+          id: `note-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+          title: title || "Catatan Baru",
+          text,
+          color: selectedStickyNoteColor,
+          createdAt: stickyNoteNowLabel(),
+          updatedAt: stickyNoteNowLabel()
+        });
+        saveStickyNotes(notes);
+        clearStickyNoteInputs(false);
+        renderStickyNotes();
+        if (window.updateStatus) updateStatus("Sticky note berhasil ditambahkan");
+      }
+
+      function clearStickyNoteInputs(resetColor = true) {
+        const titleEl = document.getElementById("noteTitleInput");
+        const textEl = document.getElementById("noteTextInput");
+        if (titleEl) titleEl.value = "";
+        if (textEl) textEl.value = "";
+        if (resetColor) {
+          selectedStickyNoteColor = STICKY_NOTE_COLORS[0].value;
+          renderStickyNoteColorPicker();
+        }
+      }
+
+      function updateStickyNoteField(noteId, field, value) {
+        const notes = getStickyNotes();
+        const target = notes.find(note => note.id === noteId);
+        if (!target) return;
+        target[field] = value;
+        target.updatedAt = stickyNoteNowLabel();
+        saveStickyNotes(notes);
+        const card = document.querySelector(`[data-note-id="${CSS.escape(noteId)}"] .sticky-note-meta span:last-child`);
+        if (card) card.textContent = target.updatedAt;
+      }
+
+      function changeStickyNoteColor(noteId, colorValue) {
+        const notes = getStickyNotes();
+        const target = notes.find(note => note.id === noteId);
+        if (!target) return;
+        target.color = colorValue || STICKY_NOTE_COLORS[0].value;
+        target.updatedAt = stickyNoteNowLabel();
+        saveStickyNotes(notes);
+        renderStickyNotes();
+      }
+
+      function deleteStickyNote(noteId) {
+        const notes = getStickyNotes().filter(note => note.id !== noteId);
+        saveStickyNotes(notes);
+        renderStickyNotes();
+        if (window.updateStatus) updateStatus("Sticky note dihapus");
+      }
+
+      function deleteAllStickyNotes() {
+        const notes = getStickyNotes();
+        if (!notes.length) return;
+        if (!confirm("Hapus semua sticky note?")) return;
+        saveStickyNotes([]);
+        renderStickyNotes();
+        if (window.updateStatus) updateStatus("Semua sticky note dihapus");
+      }
+
+      function exportStickyNotesBackup() {
+        const notes = getStickyNotes();
+        const blob = new Blob([JSON.stringify(notes, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `backup-sticky-notes-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function initStickyNotes() {
+        renderStickyNoteColorPicker();
+        renderStickyNotes();
+        const grid = document.getElementById("stickyNotesGrid");
+        if (grid && !grid.dataset.bound) {
+          grid.dataset.bound = "yes";
+          grid.addEventListener("input", event => {
+            const target = event.target;
+            if (!target || !target.dataset) return;
+            const noteId = target.dataset.noteId;
+            const field = target.dataset.noteField;
+            if (!noteId || !field) return;
+            updateStickyNoteField(noteId, field, target.value);
+          });
+        }
+      }
+
       window.onload = async function() {
         initDashboardCenterBackground();
         await loadAdminProfilesFromCloud();
         const authed = initDashboardAuth();
         initSidebar();
+        initStickyNotes();
         initKeyboardShortcuts();
         initImageManager();
         startLiveClock();
