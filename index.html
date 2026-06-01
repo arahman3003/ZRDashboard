@@ -982,6 +982,12 @@
         .rek-summary-pill {
           width: 100%;
         }
+        if (!window.__stickyNoteModalEscBound) {
+          window.__stickyNoteModalEscBound = true;
+          document.addEventListener("keydown", event => {
+            if (event.key === "Escape") closeStickyNoteModal();
+          });
+        }
       }
 
       .prediksi-item {
@@ -2163,9 +2169,13 @@
 
       .notepad-layout {
         display: grid;
-        grid-template-columns: 330px 1fr;
+        grid-template-columns: 1fr;
         gap: 20px;
         align-items: start;
+      }
+
+      .notepad-results-only {
+        grid-template-columns: 1fr;
       }
 
       .notepad-create-card,
@@ -2250,6 +2260,13 @@
         gap: 12px;
         flex-wrap: wrap;
         margin-bottom: 14px;
+      }
+
+      .notepad-toolbar-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
       }
 
       .notepad-count-pill {
@@ -2373,6 +2390,74 @@
         border-radius: 20px;
         padding: 24px;
         background: rgba(255,255,255,0.035);
+      }
+
+
+      .sticky-note-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 10050;
+        display: none;
+      }
+
+      .sticky-note-modal.show {
+        display: block;
+      }
+
+      .sticky-note-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(2,6,23,0.78);
+        backdrop-filter: blur(7px);
+      }
+
+      .sticky-note-modal-content {
+        position: relative;
+        z-index: 2;
+        width: min(92vw, 560px);
+        max-height: 92vh;
+        overflow-y: auto;
+        margin: 5vh auto;
+        padding: 20px;
+        border-radius: 26px;
+        background:
+          radial-gradient(circle at top left, rgba(250,204,21,0.14), transparent 30%),
+          linear-gradient(180deg, rgba(15,23,42,0.98), rgba(17,24,39,0.98));
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 28px 80px rgba(0,0,0,0.56);
+      }
+
+      .sticky-note-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+
+      .sticky-note-modal-header h3 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        color: #fff;
+      }
+
+      .sticky-note-modal-header p {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .sticky-note-modal-close {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.14);
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
       }
 
       @media (max-width: 1180px) {
@@ -5530,8 +5615,34 @@
               <div class="notepad-count-pill" id="notepadCountPill">0 Catatan</div>
             </div>
 
-            <div class="notepad-layout">
-              <div class="notepad-create-card">
+            <div class="notepad-layout notepad-results-only">
+              <div class="notepad-list-wrap">
+                <div class="notepad-toolbar">
+                  <div>
+                    <strong>Daftar Sticky Note</strong>
+                    <div class="panel-sub" style="margin:6px 0 0;">Yang tampil di layar hanya hasil catatan. Klik Tambah Catatan untuk input lewat popup.</div>
+                  </div>
+                  <div class="notepad-toolbar-actions">
+                    <button class="btn copy-live-btn" type="button" onclick="openStickyNoteModal()">+ Tambah Catatan</button>
+                    <button class="btn secondary" type="button" onclick="exportStickyNotesBackup()">Backup JSON</button>
+                    <button class="btn secondary" type="button" onclick="deleteAllStickyNotes()">Hapus Semua</button>
+                  </div>
+                </div>
+                <div id="stickyNotesGrid" class="notepad-grid"></div>
+              </div>
+            </div>
+
+            <div id="stickyNoteModal" class="sticky-note-modal" aria-hidden="true">
+              <div class="sticky-note-modal-backdrop" onclick="closeStickyNoteModal()"></div>
+              <div class="sticky-note-modal-content" role="dialog" aria-modal="true" aria-labelledby="stickyNoteModalTitle">
+                <div class="sticky-note-modal-header">
+                  <div>
+                    <h3 id="stickyNoteModalTitle">Tambah Sticky Note</h3>
+                    <p>Isi catatan di popup ini. Setelah ditambah, catatan muncul di dashboard dan tersimpan otomatis.</p>
+                  </div>
+                  <button class="sticky-note-modal-close" type="button" onclick="closeStickyNoteModal()">×</button>
+                </div>
+
                 <div class="notepad-form-stack">
                   <div>
                     <label class="notepad-label" for="noteTitleInput">Judul Catatan</label>
@@ -5552,24 +5663,7 @@
                     <button class="btn copy-live-btn" type="button" onclick="addStickyNote()">Tambah</button>
                     <button class="btn secondary" type="button" onclick="clearStickyNoteInputs()">Bersihkan</button>
                   </div>
-
-                  <button class="btn secondary" type="button" onclick="deleteAllStickyNotes()">Hapus Semua</button>
-
-                  <div class="notepad-save-info">
-                    <strong>Auto Save:</strong> setiap perubahan di kartu catatan langsung tersimpan otomatis di localStorage browser.
-                  </div>
                 </div>
-              </div>
-
-              <div class="notepad-list-wrap">
-                <div class="notepad-toolbar">
-                  <div>
-                    <strong>Daftar Sticky Note</strong>
-                    <div class="panel-sub" style="margin:6px 0 0;">Edit langsung pada kartu catatan. Tidak perlu tombol simpan.</div>
-                  </div>
-                  <button class="btn secondary" type="button" onclick="exportStickyNotesBackup()">Backup JSON</button>
-                </div>
-                <div id="stickyNotesGrid" class="notepad-grid"></div>
               </div>
             </div>
           </div>
@@ -9378,6 +9472,25 @@ function getImageCategory(item) {
         renderStickyNoteColorPicker();
       }
 
+
+      function openStickyNoteModal() {
+        const modal = document.getElementById("stickyNoteModal");
+        if (!modal) return;
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+        setTimeout(() => {
+          const titleInput = document.getElementById("noteTitleInput");
+          if (titleInput) titleInput.focus();
+        }, 80);
+      }
+
+      function closeStickyNoteModal() {
+        const modal = document.getElementById("stickyNoteModal");
+        if (!modal) return;
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+      }
+
       function renderStickyNotes() {
         const grid = document.getElementById("stickyNotesGrid");
         const count = document.getElementById("notepadCountPill");
@@ -9387,7 +9500,7 @@ function getImageCategory(item) {
         if (count) count.textContent = `${notes.length} Catatan`;
 
         if (!notes.length) {
-          grid.innerHTML = '<div class="notepad-empty">Belum ada sticky note. Buat catatan pertama dari form di sebelah kiri.</div>';
+          grid.innerHTML = '<div class="notepad-empty">Belum ada sticky note. Klik tombol + Tambah Catatan untuk membuat catatan pertama.</div>';
           return;
         }
 
@@ -9441,6 +9554,7 @@ function getImageCategory(item) {
         });
         saveStickyNotes(notes);
         clearStickyNoteInputs(false);
+        closeStickyNoteModal();
         renderStickyNotes();
         if (window.updateStatus) updateStatus("Sticky note berhasil ditambahkan");
       }
